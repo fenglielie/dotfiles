@@ -2,13 +2,28 @@
 $script_root_dir = Split-Path -Parent -Path (Resolve-Path $MyInvocation.MyCommand.Definition)
 
 # tmux
-New-Item -ItemType SymbolicLink -Path "$HOME/.tmux.conf" -Target "$script_root_dir/tmux/.tmux.conf" -Force
-Write-Host "tmux config finished."
+$tmux_config = "$HOME/.tmux.conf"
+if (Test-Path -Path $tmux_config) {
+    Write-Host "Error: File '$tmux_config' already exists. Please remove it or choose another location."
+} else {
+    New-Item -ItemType SymbolicLink -Path $tmux_config -Target "$script_root_dir/tmux/.tmux.conf" -Force
+    Write-Host "tmux config finished."
+}
 
 # vim
-New-Item -ItemType SymbolicLink -Path "$HOME/.vimrc" -Target "$script_root_dir/vim/.vimrc" -Force
-Write-Host "vim config finished."
+$vim_config = "$HOME/.vimrc"
+if (Test-Path -Path $vim_config) {
+    Write-Host "Error: File '$vim_config' already exists. Please remove it or choose another location."
+} else {
+    New-Item -ItemType SymbolicLink -Path $vim_config -Target "$script_root_dir/vim/.vimrc" -Force
+    Write-Host "vim config finished."
+}
 
 # git
-New-Item -ItemType SymbolicLink -Path "$HOME/.gitconfig" -Target "$script_root_dir/git/.gitconfig" -Force
-Write-Host "git config finished."
+$git_config = "$HOME/.gitconfig"
+if (Test-Path -Path $git_config) {
+    Write-Host "Error: File '$git_config' already exists. Please remove it or choose another location."
+} else {
+    New-Item -ItemType SymbolicLink -Path $git_config -Target "$script_root_dir/git/.gitconfig" -Force
+    Write-Host "git config finished."
+}

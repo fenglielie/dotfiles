@@ -1,8 +1,16 @@
 #!/bin/bash
 
-# get root dir
+# Get root dir
 script_root_dir=$(dirname "$(realpath "$0")")
 
-# fish
-ln -sf $script_root_dir/fish $HOME/.config/fish
-echo "fish config finished."
+# Define target directory
+target_dir="$HOME/.config/fish"
+
+# Check if target directory already exists
+if [ -e "$target_dir" ]; then
+    echo "Error: Directory '$target_dir' already exists. Please remove it or choose another location."
+else
+    # Create symlink
+    ln -sf "$script_root_dir/fish" "$target_dir"
+    echo "Fish config finished."
+fi
