@@ -237,6 +237,41 @@ function Get-MzcyPath{
     $env:PATH -split ';'
 }
 
+# 检查路径是否在全局 PATH 中
+function Test-MzcyPath{
+    param (
+        [string]$Directory = $PWD.Path
+    )
+    return $env:PATH -split ';' -contains $Directory
+}
+
+function Add-MzcyTempPath{
+    param (
+        [string]$Directory = $PWD.Path
+    )
+
+    # 检查目录是否存在
+    if (-not (Test-Path $Directory)) {
+        Write-Error "Directory '$Directory' does not exist."
+        return
+    }
+
+    # 获取当前 PATH 环境变量值
+    $currentPath = $env:PATH
+
+    # 检查路径是否已经存在于 PATH 中
+    if ($currentPath -split ';' -contains $Directory) {
+        Write-Output "Directory '$Directory' is already in PATH."
+        return
+    }
+
+    # 将路径添加到 PATH 中
+    $env:PATH = "$currentPath$Directory;"
+    Write-Output "Directory '$Directory' added to PATH temporarily."
+}
+
+
+
 ##################################################################
 
 # 这些命令如果不存在，则通过powershell函数伪装实现
@@ -254,6 +289,8 @@ Set-Alias -Name lla -Value Get-MzcyLl
 Set-Alias -Name pwd -Value Get-MzcyPwd
 Set-Alias -Name mkdir -Value New-MzcyMkdir
 Set-Alias -Name path -Value Get-MzcyPath
+Set-Alias -Name pathcheck -Value Test-MzcyPath
+Set-Alias -Name pathadd -Value Add-MzcyTempPath
 
 ##################################################################
 
@@ -282,4 +319,3 @@ Set-PSReadLineOption -Colors @{
 
 
 Export-ModuleMember -Function * -Alias *
-
