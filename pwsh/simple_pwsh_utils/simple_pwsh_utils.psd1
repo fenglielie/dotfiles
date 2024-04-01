@@ -3,9 +3,9 @@ ModuleVersion = '0.1'
 
 Author = 'fenglielie'
 
-RootModule = '.\mzcy_pwsh_utils.psm1'
+RootModule = '.\simple_pwsh_utils.psm1'
 
-Description = 'some useful utils by fenglielie(mzcy)'
+Description = 'some useful utils by fenglielie'
 
 AliasesToExport = '*'
 

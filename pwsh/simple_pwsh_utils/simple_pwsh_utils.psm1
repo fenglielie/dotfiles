@@ -2,7 +2,7 @@
 ##################################################################
 # cd ...
 
-function Set-MzcyCd {
+function Set-SimpleCd {
     param
     (
         $Path = $null, # 要更改到的目标目录路径，默认为空
@@ -14,8 +14,8 @@ function Set-MzcyCd {
 
     # 如果没有提供任何参数，返回到指定目录
     if (-not $Path -and -not $LiteralPath) {
-        if (Test-Path "env:MZCYHOME"){
-            $returnPath = "$env:MZCYHOME"
+        if (Test-Path "env:SIMPLEHOME"){
+            $returnPath = "$env:SIMPLEHOME"
         } else {
             $returnPath = $env:UserProfile
         }
@@ -51,7 +51,7 @@ function Set-MzcyCd {
 ##################################################################
 # which
 
-function Get-MzcyWhich {
+function Get-SimpleWhich {
     param (
         [string]$CommandName
     )
@@ -69,7 +69,7 @@ function Get-MzcyWhich {
 ##################################################################
 # touch
 
-function New-MzcyTouch {
+function New-SimpleTouch {
     param (
         [parameter(Mandatory = $true, Position = 0)]
         [string]$FilePath
@@ -88,7 +88,7 @@ function New-MzcyTouch {
 ##################################################################
 # mkdir
 
-function New-MzcyMkdir {
+function New-SimpleMkdir {
     param (
         [parameter(Mandatory = $true, Position = 0)]
         [string]$directoryPath
@@ -104,7 +104,7 @@ function New-MzcyMkdir {
 ##################################################################
 # ls/ll
 
-function Get-MzcyLs {
+function Get-SimpleLs {
     param (
         [string]$Path = ".",
         [switch]$l,
@@ -158,20 +158,20 @@ function Get-MzcyLs {
 }
 
 
-function Get-MzcyLl {
+function Get-SimpleLl {
     param (
         [string]$Path = ".",
         [switch]$l,
         [switch]$a
     )
 
-    Get-MzcyLs -l @PSBoundParameters
+    Get-SimpleLs -l @PSBoundParameters
 }
 
 ##################################################################
 # vi/vim -> notepad in windows
 
-function Open-MzcyNotepad {
+function Open-SimpleNotepad {
     param (
         [string]$FilePath
     )
@@ -204,7 +204,7 @@ function Open-MzcyNotepad {
 
 
 # 判断别名是否已经存在，如果存在则不替换，这个工具函数不导出
-function Add-MzcyAliasIfNoExists {
+function Add-SimpleAliasIfNoExists {
     param (
         [string]$AliasName,
         [string]$AliasToName
@@ -229,23 +229,23 @@ function Add-MzcyAliasIfNoExists {
     }
 }
 
-function Get-MzcyPwd {
+function Get-SimplePwd {
     (Get-Location).ToString()
 }
 
-function Get-MzcyPath{
+function Get-SimplePath{
     $env:PATH -split ';'
 }
 
 # 检查路径是否在全局 PATH 中
-function Test-MzcyPath{
+function Test-SimplePath{
     param (
         [string]$Directory = $PWD.Path
     )
     return $env:PATH -split ';' -contains $Directory
 }
 
-function Add-MzcyTempPath{
+function Add-SimpleTempPath{
     param (
         [string]$Directory = $PWD.Path
     )
@@ -275,22 +275,22 @@ function Add-MzcyTempPath{
 ##################################################################
 
 # 这些命令如果不存在，则通过powershell函数伪装实现
-Add-MzcyAliasIfNoExists vi Open-MzcyNotepad
-Add-MzcyAliasIfNoExists vim Open-MzcyNotepad
-Add-MzcyAliasIfNoExists which Get-MzcyWhich
-Add-MzcyAliasIfNoExists touch New-MzcyTouch
+Add-SimpleAliasIfNoExists vi Open-SimpleNotepad
+Add-SimpleAliasIfNoExists vim Open-SimpleNotepad
+Add-SimpleAliasIfNoExists which Get-SimpleWhich
+Add-SimpleAliasIfNoExists touch New-SimpleTouch
 
 # 别名
-Set-Alias -Name cd -Value Set-MzcyCd -Force -Option "AllScope"
-Set-Alias -Name ls -Value Get-MzcyLs
-Set-Alias -Name la -Value Get-MzcyLs
-Set-Alias -Name ll -Value Get-MzcyLl
-Set-Alias -Name lla -Value Get-MzcyLl
-Set-Alias -Name pwd -Value Get-MzcyPwd
-Set-Alias -Name mkdir -Value New-MzcyMkdir
-Set-Alias -Name path -Value Get-MzcyPath
-Set-Alias -Name pathcheck -Value Test-MzcyPath
-Set-Alias -Name pathadd -Value Add-MzcyTempPath
+Set-Alias -Name cd -Value Set-SimpleCd -Force -Option "AllScope"
+Set-Alias -Name ls -Value Get-SimpleLs
+Set-Alias -Name la -Value Get-SimpleLs
+Set-Alias -Name ll -Value Get-SimpleLl
+Set-Alias -Name lla -Value Get-SimpleLl
+Set-Alias -Name pwd -Value Get-SimplePwd
+Set-Alias -Name mkdir -Value New-SimpleMkdir
+Set-Alias -Name path -Value Get-SimplePath
+Set-Alias -Name pathcheck -Value Test-SimplePath
+Set-Alias -Name pathadd -Value Add-SimpleTempPath
 
 ##################################################################
 
