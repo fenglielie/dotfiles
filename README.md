@@ -30,7 +30,7 @@
 
 * .editorconfig: 用于规范编码，回车以及tab的文本细节
 * .clang-format: 用于格式化C++代码
-* .clamg-tidy: 用于clangd静态代码分析
+* .clang-tidy: 用于clangd静态代码分析
 
 使用`config_projectroot.sh`或者`config_projectroot.ps1`，建立相应的软链接。
 
