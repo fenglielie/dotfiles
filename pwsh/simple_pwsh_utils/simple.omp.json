@@ -30,10 +30,8 @@
           "foreground": "#87d7ff",
           "template": "{{ if .RootDir }}{{ .Location }} {{ else }}{{ .Path }}{{ end }}",
           "properties": {
-            "folder_icon": "**",
             "folder_separator_icon": "/",
-            "style": "mixed",
-            "mixed_threshold": 15
+            "style": "unique"
           }
         },
         {
