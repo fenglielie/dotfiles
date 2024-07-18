@@ -1,6 +1,6 @@
 " 显示行号，这里默认关闭
 " set number
-" 关闭vi兼容模式，这个实际上是默认的
+" 关闭vi兼容模式, 这个实际上是默认的
 set nocompatible
 
 " 设置立刻生效
@@ -36,7 +36,7 @@ set novisualbell
 set vb t_vb=
 set t_vb=
 
-"换行符设置，优先LF，其次CRLF
+"换行符设置, 优先LF, 其次CRLF
 set fileformats=unix,dos
 "设置编码
 set encoding=utf-8
@@ -47,7 +47,7 @@ set termencoding=utf-8
 
 "显示不可见字符
 set list
-"显示tab为三角形，显示行尾空格为点
+"显示tab为三角形, 显示行尾空格为点
 set listchars=tab:▷\ ,trail:·
 
 " 当文件中使用 CRLF 换行符时，显示 CRLF 换行符为 ↵
@@ -58,7 +58,7 @@ set fileformats=unix,dos
 "文件监视，如果文件被别的编辑器改变产生冲突，会发出提示，自动更新
 set autoread
 
-"激活所有模式下鼠标的使用（vim如果不接管，tmux就会接管）
+"激活所有模式下鼠标的使用(vim如果不接管, tmux就会接管)
 set mouse=a
 set selectmode=key
 
@@ -83,7 +83,7 @@ set ruler
 set showcmd
 "展示当前的模式，这应该是默认开启的
 set showmode
-"括号的匹配显示以及匹配时间，默认是4个十分之一秒
+"括号的匹配显示以及匹配时间, 默认是4个十分之一秒
 set showmatch
 set matchtime=2
 
@@ -105,7 +105,7 @@ autocmd BufWritePre * %s/\s\+$//e
 function! CheckFileEncodingUTF8()
     let file_encoding = &fileencoding
     if file_encoding !=# 'utf-8'
-        echo "Warnning：file is encoded as " . file_encoding . ", not UTF-8."
+        echo "Warnning: file is encoded as " . file_encoding . ", not UTF-8."
     endif
 endfunction
 " 在打开文件时运行检查函数
@@ -113,4 +113,3 @@ autocmd BufReadPost * call CheckFileEncodingUTF8()
 
 "语法高亮
 syntax on
-

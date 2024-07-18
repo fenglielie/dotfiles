@@ -2,25 +2,19 @@
 	name = fenglielie
 	email = fenglielie@qq.com
 [init]
-	# 默认主分支名称
 	defaultBranch = main
 [core]
-	# 默认编辑器
 	editor = vim
-	# 确保git正确显示中文信息
+	# Ensure git correctly displays Chinese characters
 	quotepath = false
-	# 在提交时将所有文本的换行符转换为LF，检出时不转换
+	# Convert all line endings to LF on commit, do not convert on checkout
 	autocrlf = input
-	# 检查文本的换行符，对于混合换行符的文件不允许提交
+	# Check line endings and prevent commit of files with mixed line endings
 	safecrlf = true
 [i18n]
-	# 确保提交信息utf-8编码
 	commitEncoding = utf-8
 [gui]
-	# 确保gui使用utf-8编码
 	encoding = utf-8
 [alias]
 	trace = log --oneline --all --graph
 	now = status -s -b
-[credential "https://latex.ustc.edu.cn"]
-	provider = generic
