@@ -3,8 +3,9 @@
 这是个人使用的用于同步各个平台的各种配置文件的仓库，
 使用时只需将当前仓库下载到本地家目录下并命名为`.dotfiles/`，然后执行`setup.py`脚本
 ```bash
-git clone git@github.com:fenglielie/dotfiles.git ~/.dotfiles
-cd ~/.dotfiles
+cd ~
+git clone git@github.com:fenglielie/dotfiles.git .dotfiles
+cd .dotfiles
 python setup.py
 ```
 
