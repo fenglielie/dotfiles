@@ -1,0 +1,70 @@
+{
+    "groups": [
+        {
+            "destination_root": {
+                "linux": "@HOME",
+                "windows": "@HOME"
+            },
+            "entries": [
+                {
+                    "source": "git/.gitconfig",
+                    "destination": ".gitconfig"
+                }
+            ]
+        },
+        {
+            "destination_root": {
+                "linux": "@HOME"
+            },
+            "entries": [
+                {
+                    "source": "tmux/.tmux.conf",
+                    "destination": ".tmux.conf"
+                },
+                {
+                    "source": "vim/.vimrc",
+                    "destination": ".vimrc"
+                },
+                {
+                    "source": "fish/conf.d/mysetup.fish",
+                    "destination": ".config/fish/conf.d/mysetup.fish"
+                }
+            ]
+        },
+        {
+            "destination_root": {
+                "linux": "@HOME/projectroot",
+                "windows": "D:\\projectroot"
+            },
+            "entries": [
+                {
+                    "source": "editorconfig/.editorconfig",
+                    "destination": ".editorconfig"
+                },
+                {
+                    "source": "clang/.clang-format",
+                    "destination": ".clang-format"
+                },
+                {
+                    "source": "clang/.clang-tidy",
+                    "destination": ".clang-tidy"
+                }
+            ]
+        },
+        {
+            "destination_root": {
+                "windows": "@PSHOME"
+            },
+            "entries": [
+                {
+                    "source": "pwsh/simple_pwsh_utils",
+                    "destination": "simple_pwsh_utils"
+                },
+                {
+                    "source": "pwsh/Microsoft.PowerShell_profile.ps1",
+                    "destination": "../Microsoft.PowerShell_profile.ps1"
+                }
+            ]
+        }
+    ]
+}
