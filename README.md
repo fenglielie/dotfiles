@@ -1,40 +1,41 @@
 # dotfiles
 
-这是个人使用的用于同步各个平台的各种配置文件的仓库。
+这是个人使用的用于同步各个平台的各种配置文件的仓库，
+使用时只需将当前仓库下载到本地家目录下并命名为`.dotfiles/`，然后执行`setup.py`脚本
+```bash
+git clone git@github.com:fenglielie/dotfiles.git ~/.dotfiles
+cd ~/.dotfiles
+python setup.py
+```
 
-脚本的主要工作是在相应位置自动建立软链接，指向当前仓库的配置文件，便于在全平台统一相关配置文件。
+`setup.py`脚本的主要工作是在配置文件位置建立指向仓库中的已有配置文件的软链接，
+便于在全平台统一相关的配置文件，具体的路径信息从`config.json`中获取。
 
-通常将当前仓库下载到本地家目录下的`.dotfiles/`，但是在脚本中并不做任何位置的假定，仓库可以存放在任何位置，脚本也可以在任何位置执行。
-
-## HOME(Linux & Windows)
-
-在HOME目录下的若干配置文件，包括：
-
-* tmux: 配置文件.tmux.conf
-* vim: 配置文件.vimrc
-* git: 配置文件.gitconfig
-* fish: 配置文件目录~/.config/fish/
-
-使用`config_home.sh`或者`config_home.ps1`，建立相应的软链接。
-
-注意：
-
-* `$HOME`是用户主目录，对于Windows通常为`C:\Users\Bob\`，对于Linux通常为`/home/Bob/`；
-* `ln -sf a b`创建软链接b指向a，如果b是一个已经存在的文件，会被`-f`选项覆盖；如果b是一个已经存在的文件夹，则会在b/创建一个指向a的名称仍然为b的软链接。
+> 由于在Windows下建立软链接需要开启管理员权限，`setup.py`脚本需要管理员权限才能成功执行。
 
 
-## ProjectRoot(Linux & Windows)
+在用户家目录下的配置文件包括：
 
-在项目根目录下的若干配置文件，包括：
+- vim 配置文件 `~/.vimrc`
+- git 配置文件 `~/.gitconfig`
+- tmux 配置文件 `~/.tmux.conf`（Linux only）
+- fish 配置文件 `~/.config/fish/mysetup.d`（Linux only）
 
-* .editorconfig: 用于规范编码，回车以及tab的文本细节
-* .clang-format: 用于格式化C++代码
-* .clang-tidy: 用于clangd静态代码分析
 
-使用`config_projectroot.sh`或者`config_projectroot.ps1`，建立相应的软链接。
+在项目根目录下的配置文件包括：
 
-注意：对项目根目录有假设：Linux默认为`~/projectroot/`，Windows默认为`D:/ProjectRoot/`。
+- `.editorconfig`: 用于规范编码，回车以及tab的文本细节
+- `.clang-format`: 用于格式化C++代码
+- `.clang-tidy`: 用于clangd的静态代码分析
 
-## Pwsh(Windows)
+> 项目根目录在Linux平台下默认为`~/projectroot/`，在Windows平台下默认为`D:/ProjectRoot/`，可以通过修改`config.json`手动设置为其它目录。
 
-一个自定义的pwsh模块，以及pwsh启动脚本，使用`config_pwsh.ps1`建立相应的软链接。
+
+除此之外，在Windows平台上还包括PowerShell的相关配置：
+
+- `simple_pwsh_utils/`
+  - `simple_pwsh_utils.psm1`：一个自定义的pwsh模块，对一些常用命令进行了封装
+  - `simple.omp.json`：一个自定义的pwsh主题（基于`oh-my-posh`定制的主题）
+- `Microsoft.PowerShell_profile.ps1`：pwsh启动脚本
+
+> 在`setup.py`脚本中，PowerShell相关配置的目标路径为环境变量`$env:PSModulePath`的第一项。
