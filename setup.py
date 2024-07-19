@@ -42,6 +42,8 @@ def expand_path(path):
         path = path.replace("@PSHOME", ps_home)
 
     path = os.path.expandvars(path)
+    path = path.replace('\\', '/')
+
     return path
 
 def handle_config(script_root_dir, destination_root, entries):
@@ -60,7 +62,7 @@ def handle_config(script_root_dir, destination_root, entries):
         create_symlink(src, dest)
 
 def main():
-    print_info("Starting script execution.")
+    print_info("dotfiles setup started.")
 
     # Get root dir
     script_root_dir = os.path.dirname(os.path.realpath(__file__))
@@ -88,7 +90,7 @@ def main():
         else:
             print_info(f"Skipping group due to unsupported platform: {system_platform}")
 
-    print_info("Script execution completed.")
+    print_info("dotfiles setup completed.")
 
 if __name__ == '__main__':
     main()

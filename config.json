@@ -57,12 +57,12 @@
             },
             "entries": [
                 {
-                    "source": "pwsh/simple_pwsh_utils",
+                    "source": "pwsh\\simple_pwsh_utils",
                     "destination": "simple_pwsh_utils"
                 },
                 {
-                    "source": "pwsh/Microsoft.PowerShell_profile.ps1",
-                    "destination": "../Microsoft.PowerShell_profile.ps1"
+                    "source": "pwsh\\Microsoft.PowerShell_profile.ps1",
+                    "destination": "..\\Microsoft.PowerShell_profile.ps1"
                 }
             ]
         }
