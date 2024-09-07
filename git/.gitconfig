@@ -18,3 +18,10 @@
 [alias]
 	trace = log --oneline --all --graph
 	now = status -s -b
+[credential "https://latex.ustc.edu.cn"]
+	provider = generic
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
