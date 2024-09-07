@@ -4,6 +4,7 @@ import os
 import json
 import platform
 import logging
+import shutil
 
 # Configure logging to output to the console
 logging.basicConfig(level=logging.INFO, format="[%(levelname)s] %(message)s")
@@ -15,7 +16,9 @@ def create_symlink(src, dest):
             f"File or directory '{dest}' already exists. Please remove it and try again."
         )
     else:
-        user_input = input("Do you want to proceed? (y/n): ").strip().lower()
+        user_input = (
+            input("Do you want to proceed with symlink? (y/n): ").strip().lower()
+        )
         if user_input == "y":
             try:
                 if os.path.isdir(src):
@@ -25,6 +28,26 @@ def create_symlink(src, dest):
                 logging.info("Symlink created successfully.")
             except Exception as e:
                 logging.error(f"Failed to create symlink: {e}")
+        else:
+            logging.info("Operation skipped by user.")
+
+
+def copy_item(src, dest):
+    if os.path.exists(dest):
+        logging.error(
+            f"File or directory '{dest}' already exists. Please remove it and try again."
+        )
+    else:
+        user_input = input("Do you want to proceed with copy? (y/n): ").strip().lower()
+        if user_input == "y":
+            try:
+                if os.path.isdir(src):
+                    shutil.copytree(src, dest)
+                else:
+                    shutil.copy2(src, dest)
+                logging.info("Copied successfully.")
+            except Exception as e:
+                logging.error(f"Failed to copy item: {e}")
         else:
             logging.info("Operation skipped by user.")
 
@@ -47,16 +70,26 @@ def handle_config(script_root_dir, destination_root, entries):
     for entry in entries:
         src = expand_path(os.path.join(script_root_dir, entry["source"]))
         dest = expand_path(os.path.join(destination_root, entry["destination"]))
+        action = entry.get("action", "symlink")  # Default action is 'symlink'
 
-        dest_dir = os.path.dirname(dest)
         logging.info(f"Source: '{src}'")
         logging.info(f"Dest:   '{dest}'")
+        logging.info(f"Action: '{action}'")
+
+        # Check if destination directory exists, create if it doesn't
+        dest_dir = os.path.dirname(dest)
         if not os.path.exists(dest_dir):
             logging.info(f"Directory '{dest_dir}' does not exist. Creating it now.")
             os.makedirs(dest_dir)
             logging.info(f"Created directory: {dest_dir}")
 
-        create_symlink(src, dest)
+        # Perform the specified action (symlink or copy)
+        if action == "symlink":
+            create_symlink(src, dest)
+        elif action == "copy":
+            copy_item(src, dest)
+        else:
+            logging.error(f"Unknown action '{action}' specified for '{src}'.")
 
 
 def main():

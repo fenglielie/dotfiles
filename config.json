@@ -8,7 +8,8 @@
             "entries": [
                 {
                     "source": "git/.gitconfig",
-                    "destination": ".gitconfig"
+                    "destination": ".gitconfig",
+                    "action": "symlink"
                 }
             ]
         },
@@ -19,15 +20,18 @@
             "entries": [
                 {
                     "source": "tmux/.tmux.conf",
-                    "destination": ".tmux.conf"
+                    "destination": ".tmux.conf",
+                    "action": "symlink"
                 },
                 {
                     "source": "vim/.vimrc",
-                    "destination": ".vimrc"
+                    "destination": ".vimrc",
+                    "action": "symlink"
                 },
                 {
                     "source": "fish/conf.d/mysetup.fish",
-                    "destination": ".config/fish/conf.d/mysetup.fish"
+                    "destination": ".config/fish/conf.d/mysetup.fish",
+                    "action": "symlink"
                 }
             ]
         },
@@ -39,15 +43,18 @@
             "entries": [
                 {
                     "source": "editorconfig/.editorconfig",
-                    "destination": ".editorconfig"
+                    "destination": ".editorconfig",
+                    "action": "symlink"
                 },
                 {
                     "source": "clang/.clang-format",
-                    "destination": ".clang-format"
+                    "destination": ".clang-format",
+                    "action": "symlink"
                 },
                 {
                     "source": "clang/.clang-tidy",
-                    "destination": ".clang-tidy"
+                    "destination": ".clang-tidy",
+                    "action": "symlink"
                 }
             ]
         },
@@ -58,11 +65,13 @@
             "entries": [
                 {
                     "source": "pwsh\\simple_pwsh_utils",
-                    "destination": "simple_pwsh_utils"
+                    "destination": "simple_pwsh_utils",
+                    "action": "copy"
                 },
                 {
                     "source": "pwsh\\Microsoft.PowerShell_profile.ps1",
-                    "destination": "..\\Microsoft.PowerShell_profile.ps1"
+                    "destination": "..\\Microsoft.PowerShell_profile.ps1",
+                    "action": "copy"
                 }
             ]
         }
