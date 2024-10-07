@@ -8,3 +8,6 @@ oh-my-posh init pwsh --config "$pwsh_module_dir/simple_pwsh_utils/simple.omp.jso
 # simple_pwsh_utils
 Import-Module simple_pwsh_utils
 Set-Alias -Name cd -Value Set-SimpleCd -Force -Option "AllScope"
+
+# https://github.com/vors/ZLocation
+Import-Module ZLocation
