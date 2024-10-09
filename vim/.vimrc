@@ -1,115 +1,90 @@
-" 显示行号，这里默认关闭
-" set number
-" 关闭vi兼容模式, 这个实际上是默认的
+" ============================================
+" .vimrc
+" 2024年10月9日
+" ============================================
+
+" 关闭 Vi 兼容模式
 set nocompatible
 
-" 设置立刻生效
-autocmd BufWritePost $MYVIMRC source $MYVIMRC
+set autoread                    " 文件被其他编辑器修改时发出提示
+set confirm                     " 处理未保存或只读文件时弹出确认
+set title                       " 改变窗口标题
+syntax on                       " 启用语法高亮
 
-" 改变title
-set title
+" 进入插入模式时高亮当前行，退出插入模式则自动关闭
+autocmd InsertEnter * set cursorline
+autocmd InsertLeave * set nocursorline
 
-" 在回车时根据上一行自动决定使用tab或替换为空格
-set smarttab
-" 显示文件中已经存在的Tab的宽度
-set tabstop=4
-" 插入新的Tab时替换为连续空格
-set expandtab
-" 插入新的Tab时替换的空格数
-set softtabstop=4
-" 自动缩进的单位宽度
-set shiftwidth=4
-" 要求自动缩进保持单位宽度的整数倍
-set shiftround
+" 缩进和制表符设置
+set tabstop=4                   " 设置 Tab 字符宽度为 4 个空格
+set softtabstop=4               " 插入时使用 4 个空格宽度
+set shiftwidth=4                " 自动缩进的宽度为 4 个空格
+set expandtab                   " 插入 Tab 时使用空格替代
+set shiftround                  " 自动缩进保持整数倍
+set smarttab                    " 根据上下文智能决定使用 Tab 或空格
 
-"关于缩进
-set autoindent
-set copyindent
-set preserveindent
-set cindent
+" 智能缩进和复制缩进
+set autoindent                  " 自动缩进新行
+set copyindent                  " 复制缩进
+set preserveindent              " 保持当前缩进
+set cindent                     " C 语言文件的缩进规则
 
-" 关闭错误信息响铃
-set noerrorbells
-" 关闭使用可视响铃代替呼叫
-set novisualbell
-" 置空错误铃声的终端代码
-set vb t_vb=
-set t_vb=
+" 错误提示设置
+set noerrorbells                " 关闭错误音
+set novisualbell                " 关闭错误音可视化（屏幕闪烁）
+set vb t_vb=                    " 置空错误铃声的终端代码
 
-" 换行符设置, 优先LF, 其次CRLF
-set fileformats=unix,dos
-" 设置编码
-set encoding=utf-8
-" 设置文件编码
+" 换行符和编码设置
+set fileformats=unix,dos        " 优先使用 LF 换行符，其次使用 CRLF
+set encoding=utf-8              " 设置文件编码为 UTF-8
+set termencoding=utf-8          " 终端编码设置
+" 支持多种文件编码
 set fileencodings=utf-8,ucs-bom,gb18030,gbk,gb2312
-" 设置终端编码
-set termencoding=utf-8
 
 " 显示不可见字符
-set list
-" 显示tab为三角形, 显示行尾空格为点
-set listchars=tab:▷\ ,trail:·
+set list                        " 显示不可见字符
+set listchars=tab:▷\ ,trail:·   " 设置显示 Tab 和尾随空格样式
 
-" 当文件中使用 CRLF 换行符时，显示 CRLF 换行符为 ↵
-autocmd BufReadPost * if &fileformat == 'dos' | set listchars+=eol:↵ | endif
-" 设置默认的换行符
-set fileformats=unix,dos
+" 状态栏设置
+set laststatus=2     " 始终显示状态栏
+" 定制状态栏具体内容
+set statusline=
+set statusline+=\ %F%m%r%h%w\ %=
+set statusline+=\ %({%{&ff}\|%{(&fenc==\"\"?&enc:&fenc).((exists(\"+bomb\")\ &&\ &bomb)?\",B\":\"\")}%k\|%Y}%)
+set statusline+=\ %([%l,%v][%p%%]\ %)
 
-" 文件监视，如果文件被别的编辑器改变产生冲突，会发出提示，自动更新
-set autoread
+" 搜索设置
+set ignorecase      " 搜索时忽略大小写
+set smartcase       " 智能忽略大小写（若输入含大写，则不会忽略大小写）
+" set hlsearch        " 高亮搜索结果
 
-" 激活所有模式下鼠标的使用(vim如果不接管, tmux就会接管)
-set mouse=a
-set selectmode=key
+" 光标禁止时高亮消失
+autocmd CursorHold * set nohlsearch
+" 当输入查找命令时，再启用高亮
+noremap n :set hlsearch<cr>n
+noremap N :set hlsearch<cr>N
+noremap / :set hlsearch<cr>/
+noremap ? :set hlsearch<cr>?
+noremap * *:set hlsearch<cr>
 
-" 显示状态栏(默认值为1,不显示)
-set laststatus=2
-" 状态行显示的具体内容
-set statusline=%<%F%m%r%h%w\ %=[%{&ff}][%Y][%l,%v][%p%%]
+" 显示当前行列数、输入命令和当前模式
+set ruler           " 显示行列数
+set showcmd         " 显示输入的命令
+set showmode        " 显示当前模式
+set showmatch       " 括号匹配显示
+set matchtime=2     " 匹配时间为 200 毫秒
 
-" 高亮搜索
-set hlsearch
-" 增量搜索，输入时不断进行搜索
-set incsearch
-" 搜索忽略大小写
-set ignorecase
-" 智能判断是否忽略大小写，如果搜索含有大写则不忽略
-set smartcase
-
-
-" 展示当前行列数，这应该是默认开启的
-set ruler
-" 输入的按键会在右下角显示出来
-set showcmd
-" 展示当前的模式，这应该是默认开启的
-set showmode
-" 括号的匹配显示以及匹配时间, 默认是4个十分之一秒
-set showmatch
-set matchtime=2
-
-" 在处理未保存或只读文件的时候，弹出确认
-set confirm
-
-" 进入插入模式时显示当前行
-autocmd InsertEnter * set cursorline
-" 退出插入模式时关闭显示当前行
-autocmd InsertLeave * set nocursorline
+" 打开非 UTF-8 编码文件时提示
+function! CheckFileEncodingUTF8()
+    let file_encoding = &fileencoding
+    if file_encoding !=# 'utf-8'
+        echo "Warning: file is encoded as " . file_encoding . ", not UTF-8."
+    endif
+endfunction
+autocmd BufReadPost * call CheckFileEncodingUTF8()
 
 " 保存时自动移除行尾空格
 autocmd BufWritePre * %s/\s\+$//e
 
-" 对于长行禁止自动换行，不开启但保留注释
-"set nowrap
-
-" 对于非utf8编码的文件在打开时提示
-function! CheckFileEncodingUTF8()
-    let file_encoding = &fileencoding
-    if file_encoding !=# 'utf-8'
-        echo "Warnning: file is encoded as " . file_encoding . ", not UTF-8."
-    endif
-endfunction
-" 在打开文件时运行检查函数
-autocmd BufReadPost * call CheckFileEncodingUTF8()
-
-" 语法高亮
-syntax on
+" 立即生效对vim配置文件的更改
+autocmd BufWritePost $MYVIMRC source $MYVIMRC
