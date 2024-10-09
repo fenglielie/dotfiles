@@ -14,13 +14,7 @@ function Set-SimpleCd {
 
     # 如果没有提供任何参数，返回到指定目录
     if (-not $Path -and -not $LiteralPath) {
-        if (Test-Path "env:SIMPLEHOME"){
-            $returnPath = "$env:SIMPLEHOME"
-        } else {
-            $returnPath = $env:UserProfile
-        }
-
-        Set-Location -Path $returnPath # 无参数时返回默认路径
+        Set-Location -Path $env:UserProfile # 无参数时返回默认路径
         return
     }
 
@@ -266,7 +260,7 @@ function Add-SimpleTempPath{
     }
 
     # 将路径添加到 PATH 中
-    $env:PATH = "$currentPath$Directory;"
+    $env:PATH = "$currentPath;$Directory"
     Write-Output "Directory '$Directory' added to PATH temporarily."
 }
 
@@ -295,22 +289,9 @@ Set-Alias -Name pathadd -Value Add-SimpleTempPath
 ##################################################################
 
 Set-PSReadLineOption -Colors @{
-    # ContinuationPrompt =
-    # Emphasis           = "red"
-    # Error              = "red" #
-    # Selection          = "white" #
-    # Default            = "white" #
-    # Comment            = "cyan"
-    # Keyword            = "red" #
     String               = "yellow"
-    # Operator           = "red" #
-    # Variable           = "green" #
     Command              = "blue"
     Parameter            = "green"
-    # Type               = "cyan"
-    # Number             = "green"
-    # Member             = "red"
-    # InlinePrediction   =
 }
 # PSReadLineOption的颜色只影响输入时的当前行渲染，不会影响输出，输出的颜色受到terminal主题的影响
 # PSReadLineOption的设置：
