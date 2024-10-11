@@ -18,10 +18,11 @@ python setup.py
 在用户家目录下的配置文件包括：
 
 - vim 配置文件 `~/.vimrc`
-- git 配置文件 `~/.gitconfig`
-- tmux 配置文件 `~/.tmux.conf`（Linux only）
+- git 配置文件 `~/.config/git/config`（注意不是`~/.gitconfig`）
+- tmux 配置文件 `~/.config/tmux/tmux.conf`（Linux only）（注意不是`~/.tmux.conf`）
 - fish 配置文件 `~/.config/fish/mysetup.d`（Linux only）
 
+这里的配置文件位置尽可能符合XDG规范。
 
 在项目根目录下的配置文件包括：
 
