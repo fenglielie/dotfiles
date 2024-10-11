@@ -17,7 +17,7 @@ def create_symlink(src, dest):
         )
     else:
         user_input = (
-            input("Do you want to proceed with symlink? (y/n): ").strip().lower()
+            input("Do you want to proceed this operation? (y/n): ").strip().lower()
         )
         if user_input == "y":
             try:

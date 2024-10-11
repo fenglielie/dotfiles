@@ -8,7 +8,7 @@
             "entries": [
                 {
                     "source": "git/.gitconfig",
-                    "destination": ".gitconfig",
+                    "destination": ".config/git/config",
                     "action": "symlink"
                 }
             ]
@@ -19,8 +19,8 @@
             },
             "entries": [
                 {
-                    "source": "tmux/.tmux.conf",
-                    "destination": ".tmux.conf",
+                    "source": "tmux/tmux.conf",
+                    "destination": ".config/tmux/tmux.conf",
                     "action": "symlink"
                 },
                 {
