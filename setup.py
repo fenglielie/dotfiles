@@ -100,7 +100,7 @@ def main():
     logging.info(f"Script root directory: {script_root_dir}")
 
     # Load configuration from JSON file
-    config_file_path = os.path.join(script_root_dir, "config.json")
+    config_file_path = os.path.join(script_root_dir, "setup-config.json")
     logging.info(f"Loading configuration from '{config_file_path}'")
 
     if not os.path.exists(config_file_path):
