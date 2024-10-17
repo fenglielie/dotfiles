@@ -41,3 +41,9 @@ python setup.py
 - `Microsoft.PowerShell_profile.ps1`：pwsh启动脚本
 
 > 在`setup.py`脚本中，PowerShell相关配置的目标路径为环境变量`$env:PSModulePath`的第一项。
+
+
+在`bash/alias.sh`中包括一些常用命令的别名，这部分内容不会被`setup.py`配置，可以在`.bashrc`中手动加载
+```bash
+[[ -f ~/.dotfiles/bash/alias.sh ]] && source ~/.dotfiles/bash/alias.sh
+```
