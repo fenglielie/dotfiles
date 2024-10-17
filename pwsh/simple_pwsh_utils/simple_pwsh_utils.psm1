@@ -53,10 +53,10 @@ function Get-SimpleWhich {
     $command = Get-Command $CommandName -ErrorAction SilentlyContinue
 
     if ($command) {
-        $command.Path -replace '\\', '/'
-    }
-    else {
-        "Command '$CommandName' not found."
+        return $command.Path -replace '\\', '/'  # 返回路径
+    } else {
+        Write-Error "Command '$CommandName' not found."  # 输出错误信息
+        return $null  # 返回 null
     }
 }
 
