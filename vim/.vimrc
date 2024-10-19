@@ -10,6 +10,14 @@ set autoread                    " 文件被其他编辑器修改时发出提示
 set confirm                     " 处理未保存或只读文件时弹出确认
 set title                       " 改变窗口标题
 syntax on                       " 启用语法高亮
+set number                      " 显示行号
+
+" jk 映射为 ESC
+inoremap jk <Esc>
+
+" 不同模式使用不同的光标
+let &t_SI = "\e[6 q"
+let &t_EI = "\e[2 q"
 
 " 进入插入模式时高亮当前行，退出插入模式则自动关闭
 autocmd InsertEnter * set cursorline
