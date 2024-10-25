@@ -18,6 +18,7 @@ python setup.py
 在用户家目录下的配置文件包括：
 
 - vim 配置文件 `~/.vimrc`
+- latexmk 配置文件 `~/.latexmkrc`
 - git 配置文件 `~/.config/git/config`（注意不是`~/.gitconfig`）
 - tmux 配置文件 `~/.config/tmux/tmux.conf`（Linux only）（注意不是`~/.tmux.conf`）
 - fish 配置文件 `~/.config/fish/mysetup.d`（Linux only）
