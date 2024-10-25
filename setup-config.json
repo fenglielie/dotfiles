@@ -10,6 +10,11 @@
                     "source": "git/.gitconfig",
                     "destination": ".config/git/config",
                     "action": "symlink"
+                },
+                {
+                    "source": "latexmk/.latexmkrc",
+                    "destination": ".latexmkrc",
+                    "action": "symlink"
                 }
             ]
         },
