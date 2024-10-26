@@ -13,7 +13,7 @@
                 },
                 {
                     "source": "latexmk/.latexmkrc",
-                    "destination": ".latexmkrc",
+                    "destination": ".config/latexmk/latexmkrc",
                     "action": "symlink"
                 }
             ]
