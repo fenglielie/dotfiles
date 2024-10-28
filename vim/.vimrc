@@ -43,7 +43,11 @@ set novisualbell                " 关闭错误音可视化（屏幕闪烁）
 set vb t_vb=                    " 置空错误铃声的终端代码
 
 " 换行符和编码设置
-set fileformats=unix,dos        " 优先使用 LF 换行符，其次使用 CRLF
+set fileformats=unix,dos,mac    " 优先使用 LF 换行符，其次使用 CRLF
+" 当文件中使用 CRLF 换行符时，显示 CRLF 换行符为 ↵
+autocmd BufReadPost * if &fileformat == 'dos' | set listchars+=eol:↵ | endif
+
+
 set encoding=utf-8              " 设置文件编码为 UTF-8
 set termencoding=utf-8          " 终端编码设置
 " 支持多种文件编码
