@@ -11,7 +11,6 @@ set confirm                     " 处理未保存或只读文件时弹出确认
 set title                       " 改变窗口标题
 syntax on                       " 启用语法高亮
 set number                      " 显示行号
-set relativenumber              " 显示相对行号
 
 " jk 映射为 ESC
 inoremap jk <Esc>
