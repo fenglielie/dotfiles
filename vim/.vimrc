@@ -1,6 +1,6 @@
 " ============================================
 " .vimrc
-" 2024年10月9日
+" fenglielie@qq.com
 " ============================================
 
 " 关闭 Vi 兼容模式
@@ -11,6 +11,7 @@ set confirm                     " 处理未保存或只读文件时弹出确认
 set title                       " 改变窗口标题
 syntax on                       " 启用语法高亮
 set number                      " 显示行号
+set relativenumber              " 显示相对行号
 
 " jk 映射为 ESC
 inoremap jk <Esc>
@@ -43,7 +44,7 @@ set novisualbell                " 关闭错误音可视化（屏幕闪烁）
 set vb t_vb=                    " 置空错误铃声的终端代码
 
 " 换行符和编码设置
-set fileformats=unix,dos,mac    " 优先使用 LF 换行符，其次使用 CRLF
+set fileformats=unix,dos    " 优先使用 LF 换行符，其次使用 CRLF
 " 当文件中使用 CRLF 换行符时，显示 CRLF 换行符为 ↵
 autocmd BufReadPost * if &fileformat == 'dos' | set listchars+=eol:↵ | endif
 
