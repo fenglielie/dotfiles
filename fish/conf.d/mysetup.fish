@@ -40,5 +40,10 @@ if status is-interactive
 
         # close default greeting message
         set -U fish_greeting
+
+        # alias
+        alias ll='ls -alF'
+        alias la='ls -A'
+        alias l='ls -CF'
     end
 end
