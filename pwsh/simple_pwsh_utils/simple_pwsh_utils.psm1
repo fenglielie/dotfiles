@@ -18,22 +18,6 @@ function Set-SimpleCd {
         return
     }
 
-    # 如果传入的目录路径包含 '...'，则进行处理
-    if ($Path -and ($Path.Contains('...'))) {
-        $a = [System.Text.RegularExpressions.Regex]::Split($Path, "(\.{3,})");
-        for ($i = 0; $i -lt $a.Length; $i++) {
-            $e = $a[$i];
-            $l = $e.Length;
-
-            # 如果连续多个点表示上级目录（例如，'...' 表示两级上级目录）
-            if (($l -gt 2) -and ($e -eq "".PadRight($l, '.'))) {
-                $a[$i] = ".." + [System.String]::Concat([System.Linq.Enumerable]::Repeat("\..", $l - 2))
-            }
-        }
-        # 使用拼接后的路径更新 $Path
-        $PSBoundParameters['Path'] = [System.String]::Concat($a)
-    }
-
     # 使用 Set-Location 命令来更改当前工作目录
     $newPath = Set-Location @PSBoundParameters
 
@@ -96,70 +80,92 @@ function New-SimpleMkdir {
 }
 
 ##################################################################
-# ls/ll
+# ls
 
 function Get-SimpleLs {
     param (
         [string]$Path = ".",
-        [switch]$l,
-        [switch]$a
+        [switch]$l,  # Long listing format
+        [switch]$a,  # Show all files, including hidden
+        [switch]$F   # Append file type indicator
     )
 
+    # 获取指定路径下的文件和文件夹
     $items = Get-ChildItem -Force $Path
 
+    # 处理 -a 选项
+    if (-not $a) {
+        $items = $items | Where-Object { $_.Name -notlike '.*' }
+    }
+
+    # 如果没有文件，直接返回
     if ($items.Count -eq 0) {
         return
     }
 
     if ($l) {
-        $items | Format-Table -AutoSize Mode,Length,LastWriteTime,@{
-                Label = "Name"
-                Expression =
-                {
-                    if ($_.PSIsContainer) {
-                        $result =  $_.Name + "/  "
-                    }
-                    else{
-                        $result = $_.Name
-                    }
-                    $result
-                }
-            }
-    }
-    else {
-        $result = ""
-        $lineLength = 0
-        $lineMaxLength = 80
-        $items | ForEach-Object {
-            $lineLength += ($_.Name).Length
-            if ($lineLength -ge $lineMaxLength) {
-                $result += "`n"
-                $lineLength = ($_.Name).Length
-            }
+        $items | Format-Table -AutoSize Mode, Length, LastWriteTime, Name
+    } else {
+        $output = @()
+        $colors = @()
+        foreach ($item in $items) {
+            $name = $item.Name
+            $color = "White"
 
-            $result += $_.name
-
-            if ($_.PSIsContainer) {
-                $result += "/  "
+            # 添加文件类型指示符和颜色
+            if ($item.PSIsContainer) {
+                $typeIndicator = "/"
+                $color = "Blue"  # 目录为蓝色
+            } elseif ($item.Attributes -match "Executable") {
+                $typeIndicator = "*"
+                $color = "Green"  # 可执行文件为绿色
+            } elseif ($item.Extension -eq ".lnk") {
+                $typeIndicator = "@"
+                $color = "Yellow"  # 链接文件为黄色
             }
             else{
-                $result += "  "
+                $typeIndicator = ""
+                $color = "White"  # 其他文件为白色
             }
+
+            $name = $name + $typeIndicator
+
+            $output += $name
+            $colors += $color
         }
 
-        Write-Output $result
+        for ($i = 0; $i -lt $output.Count; $i++) {
+            $item = $output[$i] + " "
+            if (($i + 1) % 4 -eq 0) {
+                Write-Host $item -ForegroundColor $colors[$i]
+            }
+            else{
+            Write-Host $item -ForegroundColor $colors[$i] -NoNewline
+            }
+        }
     }
 }
 
 
 function Get-SimpleLl {
     param (
-        [string]$Path = ".",
-        [switch]$l,
-        [switch]$a
+        [string]$Path = "."
     )
+    Get-SimpleLs -Path $Path -a -l -F
+}
 
-    Get-SimpleLs -l @PSBoundParameters
+function Get-SimpleLa {
+    param (
+        [string]$Path = "."
+    )
+    Get-SimpleLs -Path $Path -A
+}
+
+function Get-SimpleL {
+    param (
+        [string]$Path = "."
+    )
+    Get-SimpleLs -Path $Path -F
 }
 
 ##################################################################
@@ -277,9 +283,9 @@ Add-SimpleAliasIfNoExists touch New-SimpleTouch
 # 别名
 Set-Alias -Name cd -Value Set-SimpleCd -Force -Option "AllScope"
 Set-Alias -Name ls -Value Get-SimpleLs
-Set-Alias -Name la -Value Get-SimpleLs
+Set-Alias -Name la -Value Get-SimpleLa
 Set-Alias -Name ll -Value Get-SimpleLl
-Set-Alias -Name lla -Value Get-SimpleLl
+Set-Alias -Name l -Value Get-SimpleL
 Set-Alias -Name pwd -Value Get-SimplePwd
 Set-Alias -Name mkdir -Value New-SimpleMkdir
 Set-Alias -Name path -Value Get-SimplePath
