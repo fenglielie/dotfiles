@@ -19,7 +19,7 @@
                     }
                 },
                 {
-                    "foreground": "#4cd964",
+                    "foreground": "#95ffa4",
                     "style": "plain",
                     "template": "{{ .UserName }}@{{ .HostName }} ",
                     "type": "session"
@@ -46,7 +46,6 @@
                 {
                     "type": "status",
                     "style": "plain",
-                    "foreground": "#00df7b",
                     "foreground_templates": [
                         "{{ if .Error }}#ff8e95{{ end }}"
                     ],
