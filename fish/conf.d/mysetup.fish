@@ -41,6 +41,9 @@ set -U fish_pager_color_progress brwhite\x1e\x2d\x2dbackground\x3dcyan
 set -U fish_greeting
 
 # alias
-alias ll='ls -alF'
-alias la='ls -A'
-alias l='ls -CF'
+abbr -a ll ls -alF
+abbr -a la ls -A
+abbr -a l ls -CF
+abbr -a n nvim
+
+
