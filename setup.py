@@ -8,6 +8,8 @@ import sys
 import shutil
 import logging
 import argparse
+import pathlib
+
 
 
 LOG_COLORS = {
@@ -43,7 +45,10 @@ def path_expand(path):
 
 
 def create_symlink(src, dest):
-    if os.path.exists(dest) and not os.path.islink(dest):
+    def is_symlink(path):
+        return pathlib.Path(path).is_symlink()
+
+    if os.path.exists(dest) and not is_symlink(dest):
         logging.warning(
             f"'{dest}' exists and is not a symlink. Please remove it and try again."
         )
@@ -51,7 +56,7 @@ def create_symlink(src, dest):
 
     create_symlink_flag = False
 
-    if os.path.exists(dest) and os.path.islink(dest):
+    if os.path.exists(dest) and is_symlink(dest):
         logging.warning(f"Symlink '{dest}' already exists. Remove it.")
         os.remove(dest)
         create_symlink_flag = True
