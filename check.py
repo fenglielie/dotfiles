@@ -1,52 +1,64 @@
+#!/usr/bin/env python3
+
 import platform
 import subprocess
 import json
 import os
 import sys
 import logging
+import argparse
 
 
-# Color codes for terminal output
-class Colors:
-    GREEN = "\033[92m"  # Green
-    RED = "\033[91m"  # Red
-    WHITE = "\033[0m"  # Default (White)
+LOG_COLORS = {
+    "DEBUG": "\033[0m",  # 白色
+    "INFO": "\033[0m",  # 白色
+    "WARNING": "\033[33m",  # 黄色
+    "ERROR": "\033[31m",  # 红色
+    "CRITICAL": "\033[41m",  # 白色背景红色字体
+}
 
 
-# Configure logging
-logging.basicConfig(level=logging.DEBUG, format="%(message)s")
+class ColoredFormatter(logging.Formatter):
+    def format(self, record):
+        color = LOG_COLORS.get(record.levelname, "\033[0m")
+        return f"{color}{super().format(record)}\033[0m"
 
 
-def log_info(message, color=Colors.WHITE):
-    """Log an info message with color."""
-    logging.info(f"{color}{message}{Colors.WHITE}")
+# 配置日志
+handler = logging.StreamHandler()
+handler.setFormatter(ColoredFormatter("%(message)s"))
+logger = logging.getLogger()
+logger.addHandler(handler)
 
 
-def truncate_output(output):
-    """Truncate output to keep only the first 3 and last 3 lines if it exceeds 6 lines."""
+def truncate_output(output, verbose):
+    if not verbose:
+        return output.strip().split("\n")[0]  # Only show the first line
+
     lines = output.strip().split("\n")
     if len(lines) > 6:
         return "\n".join(lines[:3] + ["..."] + lines[-3:])
-    return output.strip()
+    else:
+        return output.strip()
 
 
-def execute_commands(commands):
-    """Execute a group of commands sequentially, returning the last command's exit status."""
-    group_output = []  # Store output for the current group
+def execute_commands(software, commands, verbose):
+    logger.info(f"\033[32m- {software}\033[0m")
+
     for command in commands:
-        group_output.append(f"{Colors.GREEN}Command:{Colors.WHITE} {command}")
+        if verbose:
+            logger.warning(f"  * {command}")
+
         try:
             if platform.system() == "Windows":
-                # Use PowerShell to execute the command
                 result = subprocess.run(
-                    ["pwsh", "-Command", command],
+                    ["pwsh", "-Command", command],  # pwsh
                     capture_output=True,
                     text=True,
                     shell=True,
                     check=True,
                 )
             else:
-                # Use shell=True for Unix-like systems
                 result = subprocess.run(
                     command,
                     capture_output=True,
@@ -55,94 +67,66 @@ def execute_commands(commands):
                     check=True,
                 )
 
-            output = truncate_output(result.stdout)
+            output = truncate_output(result.stdout, verbose)
+            logger.info(output)
 
-            # Treat empty output as an error
-            if not output:
-                group_output.append(f"{Colors.RED}Error: No output for command '{command}'{Colors.WHITE}")
-
-                log_info("\n".join(group_output))
-                return 1  # Return error status
-
-            group_output.append(f"{Colors.GREEN}Output:{Colors.WHITE}\n{output}")
         except subprocess.CalledProcessError as e:
-            group_output.append(f"{Colors.RED}Error: {e.stderr.strip()}{Colors.WHITE}")
+            logger.error("Catch a CalledProcessError")
+            return e.returncode
 
-            log_info("\n".join(group_output))
-            return e.returncode  # Return error status
-
-    log_info("\n".join(group_output))
-    return 0  # All commands executed successfully
+    return 0
 
 
 def read_config(file_path):
     """Read JSON configuration file and return a dictionary of commands."""
     if not os.path.exists(file_path):
-        log_info(
-            f"{Colors.RED}Configuration file {file_path} does not exist.{Colors.WHITE}"
-        )
-        sys.exit(1)  # Return error code
+        logging.error(f"Configuration file {file_path} does not exist.")
+        sys.exit(1)
 
     with open(file_path, "r") as f:
         config = json.load(f)
     return config
 
 
-def print_separator(title=""):
-    """Print a centered separator line with a fixed length."""
-    total_length = 40  # Set the total length of the separator line
-
-    if len(title) > 0:
-        title_length = len(title)
-        padding = (
-            total_length - 2 - title_length
-        )  # Subtract 2 for the surrounding dashes
-        left_padding = padding // 2
-        right_padding = padding - left_padding  # Ensure total length is maintained
-
-        separator = f"{'-' * left_padding} {title} {'-' * right_padding}"
-        log_info(separator)
-    else:
-        log_info(
-            "-" * total_length + "\n"
-        )  # Print a matching line of dashes at the end
-
-
 def main():
+    # Parse command line arguments
+    parser = argparse.ArgumentParser(
+        description="Script to check and execute commands from a config file."
+    )
+    parser.add_argument("--verbose", action="store_true", help="Enable verbose output")
+    parser.add_argument(
+        "--config",
+        type=str,
+        default="check-config.json",
+        help="Path to the configuration file",
+    )
+    args = parser.parse_args()
 
-    logging.info("dotfiles check started.")
+    if args.verbose:
+        logging.getLogger().setLevel(logging.DEBUG)
+    else:
+        logging.getLogger().setLevel(logging.INFO)
 
-    # Get root dir
+    logging.debug("dotfiles check started.")
+
     script_root_dir = os.path.dirname(os.path.realpath(__file__))
-    logging.info(f"Script root directory: {script_root_dir}")
+    logging.debug(f"Script root directory: {script_root_dir}")
 
-    # Load configuration from JSON file
-    config_file_path = os.path.join(script_root_dir, "check-config.json")
-    logging.info(f"Loading configuration from '{config_file_path}'")
-
-    if not os.path.exists(config_file_path):
-        logging.error(f"Configuration file '{config_file_path}' not found.")
-        return
-
+    config_file_path = args.config
+    logging.debug(f"Loading configuration from '{config_file_path}'")
     commands_config = read_config(config_file_path)
 
-    # Iterate over each software's command group
-    results = []
+    failed_results = []
     for software, commands in commands_config.items():
-        print_separator(software.upper())
+        if execute_commands(software, commands, args.verbose) != 0:
+            failed_results.append(f"- [x] {software}")
 
-        if execute_commands(commands) != 0:
-            results.append(f"- [x] {software}")
-
-        print_separator()
-
-    # Print checkbox-style list of results
-    if len(results) == 0:
-        log_info("All commands executed successfully!")
+    if len(failed_results) == 0:
+        logging.info("Ok!")
     else:
-        log_info("Some commands failed:")
-        for result in results:
-            log_info(f"{Colors.RED}{result}{Colors.WHITE}")
+        logging.error("\nFailed:")
+        for result in failed_results:
+            logging.error(result)
 
 
 if __name__ == "__main__":
