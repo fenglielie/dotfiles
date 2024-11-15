@@ -11,10 +11,10 @@ import argparse
 
 
 LOG_COLORS = {
-    "DEBUG": "\033[0m",  # 白色
-    "INFO": "\033[0m",  # 白色
-    "WARNING": "\033[33m",  # 黄色
-    "ERROR": "\033[31m",  # 红色
+    "DEBUG": "\033[0m",  # reset
+    "INFO": "\033[0m",  # reset
+    "WARNING": "\033[33m",  # yellow
+    "ERROR": "\033[31m",  # red
 }
 
 
@@ -24,11 +24,9 @@ class ColoredFormatter(logging.Formatter):
         return f"{color}{super().format(record)}\033[0m"
 
 
-# 配置日志
 handler = logging.StreamHandler()
 handler.setFormatter(ColoredFormatter("%(message)s"))
-logger = logging.getLogger()
-logger.addHandler(handler)
+logging.getLogger().addHandler(handler)
 
 
 def path_expand(path):
@@ -72,7 +70,7 @@ def create_symlink(src, dest):
 
 def copy_item(src, dest):
     if os.path.exists(dest):
-        logging.warning(f"'{dest}' already exists. Please remove it and try again.")
+        logging.error(f"'{dest}' already exists. Please remove it and try again.")
         return
 
     user_input = input("Copy '{dest}'? (y/n): ").strip().lower()
@@ -95,7 +93,7 @@ def exec_check(software, commands, verbose):
 
     def truncate(output, verbose):
         if not verbose:
-            return output.strip().split("\n")[0]  # Only show the first line
+            return output.strip().split("\n")[0]  # only show the first line
 
         lines = output.strip().split("\n")
         if len(lines) > 6:
@@ -103,11 +101,11 @@ def exec_check(software, commands, verbose):
         else:
             return output.strip()
 
-    logger.info(f"\033[32m- {software}\033[0m")  # green
+    logging.info(f"\033[32m- {software}\033[0m")  # green
 
     for command in commands:
         if verbose:
-            logger.warning(f"  * {command}")
+            logging.warning(f"  * {command}")
 
         try:
             if platform.system() == "Windows":
@@ -127,10 +125,10 @@ def exec_check(software, commands, verbose):
                     check=True,
                 )
 
-            logger.info(truncate(result.stdout, verbose))
+            logging.info(truncate(result.stdout, verbose))
 
         except subprocess.CalledProcessError as e:
-            logger.error("Catch a CalledProcessError")
+            logging.error("Catch a CalledProcessError")
             return e.returncode
 
     return 0
