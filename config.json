@@ -1,0 +1,129 @@
+{
+    "setup_groups": [
+        {
+            "dest_prefix": {
+                "linux": "${HOME}",
+                "windows": "${HOME}"
+            },
+            "entries": [
+                {
+                    "source": "git/.gitconfig",
+                    "dest": ".config/git/config",
+                    "action": "symlink"
+                }
+            ]
+        },
+        {
+            "dest_prefix": {
+                "linux": "${HOME}"
+            },
+            "entries": [
+                {
+                    "source": "tmux/tmux.conf",
+                    "dest": ".config/tmux/tmux.conf",
+                    "action": "symlink"
+                },
+                {
+                    "source": "fish/conf.d/mysetup.fish",
+                    "dest": ".config/fish/conf.d/mysetup.fish",
+                    "action": "symlink"
+                },
+                {
+                    "source": "vim/.vimrc",
+                    "dest": ".vimrc",
+                    "action": "symlink"
+                }
+            ]
+        },
+        {
+            "dest_prefix": {
+                "linux": "${HOME}/projectroot",
+                "windows": "D:\\projectroot"
+            },
+            "entries": [
+                {
+                    "source": "editorconfig/.editorconfig",
+                    "dest": ".editorconfig",
+                    "action": "symlink"
+                },
+                {
+                    "source": "clang/.clang-format",
+                    "dest": ".clang-format",
+                    "action": "symlink"
+                },
+                {
+                    "source": "clang/.clang-tidy",
+                    "dest": ".clang-tidy",
+                    "action": "symlink"
+                }
+            ]
+        },
+        {
+            "dest_prefix": {
+                "windows": "${PSHOME}"
+            },
+            "entries": [
+                {
+                    "source": "pwsh\\simple_pwsh_utils",
+                    "dest": "simple_pwsh_utils",
+                    "action": "copy"
+                },
+                {
+                    "source": "pwsh\\Microsoft.PowerShell_profile.ps1",
+                    "dest": "..\\Microsoft.PowerShell_profile.ps1",
+                    "action": "copy"
+                }
+            ]
+        }
+    ],
+    "check_groups": {
+        "gcc": [
+            "which gcc",
+            "gcc --version"
+        ],
+        "clang": [
+            "which clang",
+            "clang --version"
+        ],
+        "clangd": [
+            "which clangd",
+            "clangd --version"
+        ],
+        "cmake": [
+            "which cmake",
+            "cmake --version"
+        ],
+        "ninja": [
+            "which ninja",
+            "ninja --version"
+        ],
+        "git": [
+            "which git",
+            "git --version"
+        ],
+        "tmux": [
+            "which tmux",
+            "tmux -V"
+        ],
+        "fish": [
+            "which fish",
+            "fish -v"
+        ],
+        "vim": [
+            "which vim",
+            "vim --version"
+        ],
+        "neovim": [
+            "which nvim",
+            "nvim --version"
+        ],
+        "python": [
+            "which python",
+            "python --version"
+        ],
+        "python3": [
+            "which python3",
+            "python3 --version"
+        ]
+    }
+}
