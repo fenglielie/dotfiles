@@ -3,14 +3,13 @@
 这是个人使用的用于同步各个平台的各种配置文件的仓库，
 使用时只需将当前仓库下载到本地家目录下并命名为`.dotfiles/`，然后执行`setup.py`脚本
 ```bash
-cd ~
-git clone git@github.com:fenglielie/dotfiles.git .dotfiles
-cd .dotfiles
+git clone git@github.com:fenglielie/dotfiles.git ~/.dotfiles
+cd ~/.dotfiles
 python setup.py
 ```
 
 `setup.py`脚本的主要工作是在配置文件位置建立指向仓库中的已有配置文件的软链接，
-便于在全平台统一相关的配置文件，具体的路径信息从`config.json`中获取。
+便于在全平台统一相关的配置文件，具体的路径信息从`setup-config.json`中获取。
 
 > 由于在Windows下建立软链接需要开启管理员权限，`setup.py`脚本需要管理员权限才能成功执行。
 
@@ -24,13 +23,21 @@ python setup.py
 
 这里的配置文件位置尽可能符合XDG规范。
 
+为了简化tmux的使用，提供了`tm.sh`脚本，可以在`~/.bashrc`中导入
+```bash
+if [ -f "$HOME/.dotfiles/tmux/tm.sh" ]; then
+  source "$HOME/.dotfiles/tmux/tm.sh"
+fi
+```
+
+
 在项目根目录下的配置文件包括：
 
 - `.editorconfig`: 用于规范编码，回车以及tab的文本细节
 - `.clang-format`: 用于格式化C++代码
 - `.clang-tidy`: 用于clangd的静态代码分析
 
-> 项目根目录在Linux平台下默认为`~/projectroot/`，在Windows平台下默认为`D:/ProjectRoot/`，可以通过修改`config.json`手动设置为其它目录。
+> 项目根目录在Linux平台下默认为`~/projectroot/`，在Windows平台下默认为`D:/ProjectRoot/`，可以通过修改`setup-config.json`手动设置为其它目录。
 
 
 除此之外，在Windows平台上还包括PowerShell的相关配置：
@@ -41,3 +48,6 @@ python setup.py
 - `Microsoft.PowerShell_profile.ps1`：pwsh启动脚本
 
 > 在`setup.py`脚本中，PowerShell相关配置的目标路径为环境变量`$env:PSModulePath`的第一项。
+
+
+为了便于使用，还加上了检查脚本`check.py`以及对应的配置文件`check-config.json`，可以快速查看当前平台是否具有常用的工具。
