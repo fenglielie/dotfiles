@@ -27,7 +27,7 @@ set -U fish_color_redirection D4BFFF
 set -U fish_color_search_match \x2d\x2dbackground\x3dFFCC66
 set -U fish_color_selection \x2d\x2dbackground\x3dFFCC66
 set -U fish_color_status red
-set -U fish_color_user 95FFA4
+set -U fish_color_user brgreen
 set -U fish_color_valid_path \x2d\x2dunderline
 
 set -U fish_key_bindings fish_default_key_bindings
