@@ -12,10 +12,9 @@ def init_bash(config):
         return
 
     # 标记文本
-    start_marker = "# [START] my dotfiles init "
+    start_marker = "# [START] my dotfiles init"
     end_marker = "# [END] my dotfiles init"
-    script_text = f"""
-{start_marker}
+    script_text = f"""{start_marker}
 # Auto-generated block for my dotfiles, do not edit
 if [ -f "{config}" ]; then
     source "{config}"
@@ -39,9 +38,9 @@ fi
     if start_idx is not None and end_idx is not None:
         # 如果找到首尾标记，替换掉中间的部分
         bashrc_content = (
-            bashrc_content[: start_idx + 1]
-            + [script_text.strip()]
-            + bashrc_content[end_idx:]
+            bashrc_content[: start_idx]
+            + [script_text]
+            + bashrc_content[end_idx + 1:]
         )
 
         print("Updated existing section in .bashrc.")
