@@ -6,6 +6,3 @@ foreach ($Script in $ScriptFiles) {
     # Write-Host "Sourcing $($Script.FullName)"
     . $Script.FullName
 }
-
-# oh-my-posh scheme
-oh-my-posh init pwsh --config "$ScriptDir/../omp/simple.omp.json" | Invoke-Expression
