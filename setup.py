@@ -31,27 +31,21 @@ logging.getLogger().addHandler(handler)
 
 def path_expand(path):
     path = path.replace("${HOME}", os.path.expanduser("~"))
-
-    ps_module_path = os.environ.get("PSModulePath", "")
-    if ps_module_path:
-        ps_home = ps_module_path.split(";")[0]
-        path = path.replace("${PSHOME}", ps_home)
-
     return os.path.expandvars(path).replace("\\", "/")
 
 
 def create_symlink(src, dest):
 
     if os.path.exists(dest) and not os.path.islink(dest):
-        logging.warning(
+        logging.error(
             f"'{dest}' exists and is not a symlink. Please remove it and try again."
         )
-        return
+        return False
 
     create_symlink_flag = False
 
     if os.path.exists(dest) and os.path.islink(dest):
-        logging.warning(f"Symlink '{dest}' already exists. Remove it.")
+        logging.warning(f"Symlink '{dest}' already exists. Remove old one first.")
         os.remove(dest)
         create_symlink_flag = True
     else:
@@ -60,33 +54,51 @@ def create_symlink(src, dest):
 
     if create_symlink_flag:
         try:
+            dest_dir = os.path.dirname(dest)
+            if not os.path.exists(dest_dir):
+                logging.debug(f"Dir '{dest_dir}' does not exist. Creating it now.")
+                os.makedirs(dest_dir)
+                logging.debug(f"Create dir: {dest_dir}")
+
             os.symlink(src, dest, target_is_directory=os.path.isdir(src))
             logging.debug("Create symlink successfully.")
+            return True
         except Exception as e:
             logging.error(f"Failed to create symlink '{dest}': {e}")
     else:
         logging.info("Skip.")
 
+    return False
+
 
 def copy_item(src, dest):
     if os.path.exists(dest):
         logging.error(f"'{dest}' already exists. Please remove it and try again.")
-        return
+        return False
 
     user_input = input("Copy '{dest}'? (y/n): ").strip().lower()
     copy_item_flag = user_input == "y"
 
     if copy_item_flag:
         try:
+            dest_dir = os.path.dirname(dest)
+            if not os.path.exists(dest_dir):
+                logging.debug(f"Dir '{dest_dir}' does not exist. Creating it now.")
+                os.makedirs(dest_dir)
+                logging.debug(f"Create dir: {dest_dir}")
+
             if os.path.isdir(src):
                 shutil.copytree(src, dest)
             else:
                 shutil.copy2(src, dest)
             logging.debug("Copy successfully.")
+            return True
         except Exception as e:
             logging.error(f"Failed to copy item '{dest}': {e}")
     else:
         logging.info("Skip.")
+
+    return False
 
 
 def exec_check(software, commands, verbose):
@@ -141,18 +153,12 @@ def exec_setup(dotfiles_root, dest_prefix, entries, verbose):
         dest = path_expand(os.path.join(dest_prefix, entry["dest"]))
         action = entry.get("action", "symlink")  # Default 'symlink'
 
-        dest_dir = os.path.dirname(dest)
-        if not os.path.exists(dest_dir):
-            logging.debug(f"Dir '{dest_dir}' does not exist. Creating it now.")
-            os.makedirs(dest_dir)
-            logging.debug(f"Create dir: {dest_dir}")
-
         if action == "symlink":
-            logging.info(f"\033[34m'{dest}'\033[0m link to '{source}'")
-            create_symlink(source, dest)
+            if create_symlink(source, dest):
+                logging.info(f"\033[34m'{dest}'\033[0m --> \033[32m'{source}'\033[0m")
         elif action == "copy":
-            logging.info(f"\033[35m'{dest}'\033[0m copy from '{source}'")
-            copy_item(source, dest)
+            if copy_item(source, dest):
+                logging.info(f"\033[35m'{dest}'\033[0m >>> \033[32m'{source}'\033[0m")
         else:
             logging.error(f"Unknown action: {action}'.")
 
@@ -161,19 +167,16 @@ def setup(config, verbose):
     system_platform = platform.system().lower()
     logging.debug(f"Detected platform: {system_platform}")
 
-    dotfiles_root = os.path.dirname(os.path.realpath(__file__))
+    dotfiles_root = os.path.dirname(os.path.realpath(__file__)).replace("\\", "/")
     logging.debug(f"dotfiles_root = {dotfiles_root}")
 
     for group in config["setup_groups"]:
-        if system_platform not in group["dest_prefix"]:
-            logging.debug(f"Skip group with unsupported platform: {system_platform}")
+        if system_platform not in group["dest_prefix"]:  # skip
             continue
 
         dest_prefix = path_expand(group["dest_prefix"][system_platform])
         logging.debug(f"dest_prefix = {dest_prefix}")
         exec_setup(dotfiles_root, dest_prefix, group["entries"], verbose)
-
-    logging.info("[Setup completed]")
 
 
 def check(config, verbose):
@@ -185,7 +188,7 @@ def check(config, verbose):
     if len(failed_results) == 0:
         logging.info("[Check success]")
     else:
-        logging.error("\n[Check failed]")
+        logging.info("\n[Check failed]")
         for result in failed_results:
             logging.error(result)
 
