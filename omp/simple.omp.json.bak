@@ -1,0 +1,81 @@
+{
+    "$schema": "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json",
+    "version": 2,
+    "console_title_template": "{{.UserName}}@{{.HostName}}: {{.PWD}}",
+    "blocks": [
+        {
+            "type": "prompt",
+            "alignment": "left",
+            "segments": [
+                {
+                    "type": "executiontime",
+                    "style": "plain",
+                    "foreground": "#D4F107",
+                    "template": "\uf017 {{ .FormattedMs }} ",
+                    "properties": {
+                        "always_enabled": false,
+                        "profix": "",
+                        "threshold": 2000
+                    }
+                },
+                {
+                    "foreground": "#95ffa4",
+                    "style": "plain",
+                    "template": "{{ .UserName }}@{{ .HostName }} ",
+                    "type": "session"
+                },
+                {
+                    "type": "path",
+                    "style": "plain",
+                    "foreground": "#87d7ff",
+                    "template": "{{ if .RootDir }}{{ .Location }} {{ else }}{{ .Path }}{{ end }}",
+                    "properties": {
+                        "folder_separator_icon": "/",
+                        "style": "unique"
+                    }
+                },
+                {
+                    "foreground": "#dcdfe4",
+                    "style": "plain",
+                    "template": " ({{ .HEAD }})",
+                    "type": "git",
+                    "properties": {
+                        "branch_icon": ""
+                    }
+                },
+                {
+                    "type": "status",
+                    "style": "plain",
+                    "foreground_templates": [
+                        "{{ if .Error }}#ff8e95{{ end }}"
+                    ],
+                    "template": "{{ if eq .Code 0 }}{{ else }} [{{ .Code }}]{{ end }}",
+                    "properties": {
+                        "always_enabled": false
+                    }
+                },
+                {
+                    "foreground": "#95ffa4",
+                    "style": "plain",
+                    "template": "\u276f ",
+                    "type": "text"
+                }
+            ]
+        },
+        {
+            "type": "rprompt",
+            "alignment": "right",
+            "segments": [
+                {
+                    "type": "python",
+                    "style": "plain",
+                    "foreground": "#906cff",
+                    "template": "{{ if .Error }}{{ .Error }}{{ else }}{{ if .Venv }}({{ .Venv }}){{ end }}{{ end }}",
+                    "properties": {
+                        "display_mode": "context"
+                    }
+                }
+            ]
+        }
+    ]
+}
