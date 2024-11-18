@@ -1,4 +1,3 @@
-
 ##################################################################
 # cd ...
 
@@ -304,5 +303,4 @@ Set-PSReadLineOption -Colors @{
 # 如果使用文字，则具体颜色基于terminal的主题；
 # 如果直接使用RGB，则不受terminal主题的影响
 
-
-Export-ModuleMember -Function * -Alias *
+Set-Alias -Name cd -Value Set-SimpleCd -Force -Option "AllScope"
