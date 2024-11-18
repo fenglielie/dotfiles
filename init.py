@@ -10,8 +10,11 @@ def update_config_file(file_path, config, start_marker, end_marker, script_templ
         print(f"Error: Configuration file '{file_path}' does not exist.")
         sys.exit(1)
 
-    script_text = script_template.format(
-        config=config, start_marker=start_marker, end_marker=end_marker
+    script_text = (
+        script_template.format(
+            config=config, start_marker=start_marker, end_marker=end_marker
+        ).strip()
+        + "\n"
     )
 
     with open(file_path, "r") as file:
@@ -26,12 +29,20 @@ def update_config_file(file_path, config, start_marker, end_marker, script_templ
             end_idx = idx
 
     if start_idx is not None and end_idx is not None:
-        file_content = (
-            file_content[:start_idx] + [script_text] + file_content[end_idx + 1 :]
-        )
-        print(f"Updated existing section in {file_path}.")
+        existing_block = "".join(file_content[start_idx : end_idx + 1])
+        if existing_block == script_text:
+            print(f"No changes made to {file_path}, the content is already up-to-date.")
+            return
+        else:
+            print(f"${existing_block}$")
+            print(f"${script_text}$")
+
+            file_content = (
+                file_content[:start_idx] + [script_text] + file_content[end_idx + 1 :]
+            )
+            print(f"Updated existing section in {file_path}.")
     else:
-        file_content.append(f"\n{script_text.strip()}\n")
+        file_content.append(f"\n{script_text}\n")
         print(f"Added new section to {file_path}.")
 
     with open(file_path, "w") as file:
@@ -106,7 +117,9 @@ if test -f "{config}"
 end
 {end_marker}
 """
-    update_config_file(fish_config_path, config, start_marker, end_marker, script_template)
+    update_config_file(
+        fish_config_path, config, start_marker, end_marker, script_template
+    )
 
 
 if __name__ == "__main__":
@@ -118,13 +131,19 @@ if __name__ == "__main__":
     dotfiles_root = os.path.dirname(os.path.realpath(__file__)).replace("\\", "/")
 
     if action == "bash":
-        bash_source_file = os.path.join(dotfiles_root, "bash/init_bash.sh").replace("\\", "/")
+        bash_source_file = os.path.join(dotfiles_root, "bash/init_bash.sh").replace(
+            "\\", "/"
+        )
         init_bash(bash_source_file)
     elif action == "pwsh":
-        pwsh_source_file = os.path.join(dotfiles_root, "pwsh/init_pwsh.ps1").replace("\\", "/")
+        pwsh_source_file = os.path.join(dotfiles_root, "pwsh/init_pwsh.ps1").replace(
+            "\\", "/"
+        )
         init_pwsh(pwsh_source_file)
     elif action == "fish":
-        fish_source_file = os.path.join(dotfiles_root, "fish/init_fish.fish").replace("\\", "/")
+        fish_source_file = os.path.join(dotfiles_root, "fish/init_fish.fish").replace(
+            "\\", "/"
+        )
         init_fish(fish_source_file)
     else:
         print("Invalid option. Use 'bash', 'pwsh', or 'fish'.")
