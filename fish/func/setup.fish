@@ -1,5 +1,4 @@
-echo "call setup"
-
+# echo "call setup"
 
 set -U __fish_initialized 3100
 

@@ -1,4 +1,4 @@
-echo "call alias"
+# echo "call alias"
 
 # alias
 abbr -a ll ls -alF

@@ -1,6 +1,6 @@
-set script_dir (dirname (status --current-filename | realpath))
+set script_dir (realpath (dirname (status --current-filename)))
 
-for script in $script_dir/func/*.sh
+for script in $script_dir/func/*.fish
     if test -f $script
         # echo "source $script"
         source $script
