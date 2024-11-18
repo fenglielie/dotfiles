@@ -12,11 +12,10 @@ python setup.py
 便于在全平台统一相关的配置文件，具体的路径信息从`config.json`中获取。
 为了便于使用，还给`setup.py`加上了检查参数`--check`，可以快速查看当前平台是否具有常用的工具。
 
-在Windows平台需要额外注意：
+在Windows平台需要注意：
 
 - 建立软链接需要开启管理员权限，`setup.py`脚本需要管理员权限才能成功执行。
 - 由于软链接和Linux中不同，可能存在判断错误的问题。
-
 
 在用户家目录下的配置文件包括：
 
@@ -38,11 +37,20 @@ python setup.py
 > 项目根目录在Linux平台下默认为`~/projectroot/`，在Windows平台下默认为`D:/ProjectRoot/`，可以通过修改`config.json`手动设置为其它目录。
 
 
-除此之外，在Windows平台上还包括PowerShell的相关配置，直接进行复制而非使用软链接：
+针对不同的shell（bash，fish，pwsh），考虑到不同平台的实际差异，完全同步整个配置文件是不合实际的，
+因此选择将适合同步的公共部分抽取出来，模仿`conda init`的机制，使用`init.py`脚本在shell的配置文件中添加固定的启动片段。
 
-- `simple_pwsh_utils/`
-  - `simple_pwsh_utils.psm1`：一个自定义的pwsh模块，对一些常用命令进行了封装
-  - `simple.omp.json`：一个自定义的pwsh主题（基于`oh-my-posh`定制的主题）
-- `Microsoft.PowerShell_profile.ps1`：pwsh启动脚本
+以bash为例，`init.py`脚本会在`~/.bashrc`中添加如下片段
+```bash
+# [START] my dotfiles init
+# Auto-generated block for my dotfiles, do not edit
+if [ -f "/home/fenglielie/.dotfiles/bash/init_bash.sh" ]; then
+    source "/home/fenglielie/.dotfiles/bash/init_bash.sh"
+fi
+# [END] my dotfiles init
+```
 
-> 在`setup.py`脚本中，PowerShell相关配置的目标路径为环境变量`$env:PSModulePath`的第一项。
+`init_bash.sh`的实际内容是遍历`bash/func`子目录，调用其中的所有bash脚本。
+
+对于fish，片段写入的配置文件为`~/.config/fish/config.fish`，具体逻辑同bash。
+对于pwsh则比较复杂，因为无法直接确定配置文件的路径，在`init.py`中通过开启一个pwsh进程执行`echo $PROFILE`命令的方式来获取配置文件的完整路径，其它逻辑同bash。
