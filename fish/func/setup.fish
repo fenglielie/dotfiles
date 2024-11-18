@@ -1,8 +1,5 @@
-# echo "call mysetup.fish"
+echo "call setup"
 
-if status is-interactive
-    # echo "hello, fish"
-end
 
 set -U __fish_initialized 3100
 
@@ -38,10 +35,4 @@ set -U fish_pager_color_prefix normal\x1e\x2d\x2dbold\x1e\x2d\x2dunderline
 set -U fish_pager_color_progress brwhite\x1e\x2d\x2dbackground\x3dcyan
 
 # close default greeting message
-set -U fish_greeting
-
-# alias
-abbr -a ll ls -alF
-abbr -a la ls -A
-abbr -a l ls -CF
-abbr -a n nvim
+# set -U fish_greeting

@@ -24,11 +24,6 @@
                     "action": "symlink"
                 },
                 {
-                    "source": "fish/conf.d/mysetup.fish",
-                    "dest": ".config/fish/conf.d/mysetup.fish",
-                    "action": "symlink"
-                },
-                {
                     "source": "vim/.vimrc",
                     "dest": ".vimrc",
                     "action": "symlink"
@@ -38,7 +33,7 @@
         {
             "dest_prefix": {
                 "linux": "${HOME}/projectroot",
-                "windows": "D:\\projectroot"
+                "windows": "D:/projectroot"
             },
             "entries": [
                 {
@@ -55,23 +50,6 @@
                     "source": "clang/.clang-tidy",
                     "dest": ".clang-tidy",
                     "action": "symlink"
-                }
-            ]
-        },
-        {
-            "dest_prefix": {
-                "windows": "${PSHOME}"
-            },
-            "entries": [
-                {
-                    "source": "pwsh\\simple_pwsh_utils",
-                    "dest": "simple_pwsh_utils",
-                    "action": "copy"
-                },
-                {
-                    "source": "pwsh\\Microsoft.PowerShell_profile.ps1",
-                    "dest": "..\\Microsoft.PowerShell_profile.ps1",
-                    "action": "copy"
                 }
             ]
         }
