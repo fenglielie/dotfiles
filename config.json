@@ -87,6 +87,10 @@
             "which fish",
             "fish -v"
         ],
+        "vim": [
+            "which vim",
+            "vim --version"
+        ],
         "neovim": [
             "which nvim",
             "nvim --version"

@@ -38,27 +38,27 @@ def create_symlink(src, dest):
 
     if os.path.exists(dest) and not os.path.islink(dest):
         logging.error(
-            f"'{dest}' exists and is not a symlink. Please remove it and try again."
+            f"'{dest}' exists and is not a symlink. Please remove it manually."
         )
         return False
 
     create_symlink_flag = False
 
     if os.path.exists(dest) and os.path.islink(dest):
-        logging.warning(f"Symlink '{dest}' already exists. Remove old one first.")
+        logging.warning(f"'{dest}' (symlink) already exists. Remove it.")
         os.remove(dest)
         create_symlink_flag = True
     else:
-        user_input = input(f"Create symlink '{dest}'? (y/n): ").strip().lower()
+        user_input = input(f"Create '{dest}' (symlink) ? (y/n): ").strip().lower()
         create_symlink_flag = user_input == "y"
 
     if create_symlink_flag:
         try:
             dest_dir = os.path.dirname(dest)
             if not os.path.exists(dest_dir):
-                logging.debug(f"Dir '{dest_dir}' does not exist. Creating it now.")
+                logging.debug(f"'{dest_dir}' (dir) does not exist. Creating it now.")
                 os.makedirs(dest_dir)
-                logging.debug(f"Create dir: {dest_dir}")
+                logging.debug(f"Create '{dest_dir}' (dir)")
 
             os.symlink(src, dest, target_is_directory=os.path.isdir(src))
             logging.debug("Create symlink successfully.")
@@ -73,19 +73,19 @@ def create_symlink(src, dest):
 
 def copy_item(src, dest):
     if os.path.exists(dest):
-        logging.error(f"'{dest}' already exists. Please remove it and try again.")
+        logging.error(f"'{dest}' already exists. Please remove it manually.")
         return False
 
-    user_input = input("Copy '{dest}'? (y/n): ").strip().lower()
+    user_input = input("Copy '{dest}' ? (y/n): ").strip().lower()
     copy_item_flag = user_input == "y"
 
     if copy_item_flag:
         try:
             dest_dir = os.path.dirname(dest)
             if not os.path.exists(dest_dir):
-                logging.debug(f"Dir '{dest_dir}' does not exist. Creating it now.")
+                logging.debug(f"'{dest_dir}' (dir) does not exist. Creating it now.")
                 os.makedirs(dest_dir)
-                logging.debug(f"Create dir: {dest_dir}")
+                logging.debug(f"Create '{dest_dir}' (dir)")
 
             if os.path.isdir(src):
                 shutil.copytree(src, dest)
@@ -139,9 +139,17 @@ def exec_check(software, commands, verbose):
 
             logging.info(truncate(result.stdout, verbose))
 
+            if result.returncode != 0:
+                logging.error(f"Command failed with return code {result.returncode}.")
+                return result.returncode
+
+            if not result.stdout.strip():
+                logging.error("Command output is empty.")
+                return 1
+
         except subprocess.CalledProcessError as e:
             logging.error("Catch a CalledProcessError")
-            return e.returncode
+            return e.returncode if e.returncode != 0 else 1
 
     return 0
 
