@@ -3,83 +3,114 @@
 " fenglielie@qq.com
 " ============================================
 
-" 关闭 Vi 兼容模式
+" Disable Vi compatibility mode
 set nocompatible
 
-set autoread                    " 文件被其他编辑器修改时发出提示
-set confirm                     " 处理未保存或只读文件时弹出确认
-set title                       " 改变窗口标题
-syntax on                       " 启用语法高亮
-set number                      " 显示行号
+" set number                    " Show line numbers
+" set relativenumber            " Show relative line numbers
 
-" 缩进和制表符设置
-set tabstop=4                   " 设置 Tab 字符宽度为 4 个空格
-set softtabstop=4               " 插入时使用 4 个空格宽度
-set shiftwidth=4                " 自动缩进的宽度为 4 个空格
-set expandtab                   " 插入 Tab 时使用空格替代
-set shiftround                  " 自动缩进保持整数倍
-set smarttab                    " 根据上下文智能决定使用 Tab 或空格
+set autoread                    " Reload file if modified externally (if no conflicts)
+set confirm                     " Prompt when handling unsaved or read-only files
+set title                       " Change window title
+syntax on                       " Enable syntax highlighting
+set showmatch                   " Highlight matching parentheses
+set matchtime=2                 " Match highlight duration (200ms)
+set ruler                       " Show line and column numbers
+set showcmd                     " Show typed commands
+set showmode                    " Display current mode
 
-" 智能缩进和复制缩进
-set autoindent                  " 自动缩进新行
-set copyindent                  " 复制缩进
-set preserveindent              " 保持当前缩进
-set cindent                     " C 语言文件的缩进规则
+" Indentation and tab settings
+set tabstop=4                   " Tab width (4 spaces)
+set softtabstop=4               " Soft tab width when editing
+set shiftwidth=4                " Indent width for auto-indents
+set expandtab                   " Use spaces instead of tabs
+set shiftround                  " Round indentation to nearest shiftwidth
+set smarttab                    " Adjust tabs intelligently based on context
+set autoindent                  " Enable automatic indentation
+set copyindent                  " Copy indentation from previous lines
+set preserveindent              " Preserve original indentation
+set cindent                     " Enable C-style indentation
 
-" 错误提示设置
-set noerrorbells                " 关闭错误音
-set novisualbell                " 关闭错误音可视化（屏幕闪烁）
-set vb t_vb=                    " 置空错误铃声的终端代码
+" Disable error sounds and visuals
+set noerrorbells                " Disable error sounds
+set novisualbell                " Disable visual bell (screen flash)
+set vb t_vb=                    " Clear terminal bell codes
 
-set fileformats=unix,dos,mac    " 支持多种换行符
+" Display invisible characters
+set list                                " Show invisible characters
+set listchars=tab:>\ ,trail:·,nbsp:+    " Define styles for tabs and trailing spaces
 
-" 当文件中使用 CRLF 换行符时，显示 CRLF 换行符为 ↵
-autocmd BufReadPost * if &fileformat == 'dos' | set listchars+=eol:↵ | endif
-" 当文件中使用 LF 换行符时，显示 LF 换行符为 ←
-autocmd BufReadPost * if &fileformat == 'mac' | set listchars+=eol:← | endif
+" Search settings
+set ignorecase                  " Ignore case during search
+set smartcase                   " Case-sensitive if search includes uppercase letters
 
-" 进入插入模式时高亮当前行，退出插入模式则自动关闭
+" Line ending support
+set fileformats=unix,dos,mac    " Support Unix (LF), Windows (CRLF), and macOS (CR) line endings
+
+" Encoding settings
+set encoding=utf-8              " Set file encoding to UTF-8
+set termencoding=utf-8          " Set terminal encoding to UTF-8
+set fileencodings=utf-8,ucs-bom,gb18030,gbk,gb2312  " Recognize multiple file encodings
+
+
+" #####################
+" #      command      #
+" #####################
+
+" Visualize line endings
+function! VisualizeEOL()
+    if &fileformat == 'dos'
+        set listchars+=eol:↵
+    elseif &fileformat == 'mac'
+        set listchars+=eol:←
+    elseif &fileformat == 'unix'
+        set listchars+=eol:↓
+    endif
+endfunction
+
+command! EOLViz call VisualizeEOL()
+
+" Clean trailing whitespace
+function! CleanWhitespace()
+    %s/\s\+$//e
+endfunction
+
+command! TrimWS call CleanWhitespace()
+
+
+" #####################
+" #      autocmd      #
+" #####################
+
+" Check the file's encoding and newline format
+function! CheckFileEncodingAndEOL()
+    let file_encoding = &fileencoding
+    if file_encoding !=# 'utf-8'
+        echo "Warning: File is encoded as " . file_encoding . ", not UTF-8."
+    endif
+
+    let file_format = &fileformat
+    if file_format !=# 'unix'
+        echo "Warning: File uses " . file_format . " line endings, not unix (LF)."
+    endif
+endfunction
+
+autocmd BufReadPost * call CheckFileEncodingAndEOL()
+
+" Highlight the current line in insert mode, disable it in other modes
 autocmd InsertEnter * set cursorline
 autocmd InsertLeave * set nocursorline
 
-set encoding=utf-8              " 设置文件编码为 UTF-8
-set termencoding=utf-8          " 终端编码设置
-set fileencodings=utf-8,ucs-bom,gb18030,gbk,gb2312  " 支持多种文件编码
 
-" 打开非 UTF-8 编码文件时提示
-function! CheckFileEncodingUTF8()
-    let file_encoding = &fileencoding
-    if file_encoding !=# 'utf-8'
-        echo "Warning: file is encoded as " . file_encoding . ", not UTF-8."
-    endif
-endfunction
-autocmd BufReadPost * call CheckFileEncodingUTF8()
+" ########################
+" #      statusline      #
+" ########################
 
-" 显示不可见字符
-set list                        " 显示不可见字符
-set listchars=tab:>\ ,trail:·   " 设置显示 Tab 和尾随空格样式
+" Always show the status line
+set laststatus=2
 
-" 保存时自动移除行尾空格
-autocmd BufWritePre * %s/\s\+$//e
-
-" 搜索设置
-set ignorecase      " 搜索时忽略大小写
-set smartcase       " 智能忽略大小写（若输入含大写，则不会忽略大小写）
-
-" 显示当前行列数、输入命令和当前模式
-set ruler           " 显示行列数
-set showcmd         " 显示输入的命令
-set showmode        " 显示当前模式
-set showmatch       " 括号匹配显示
-set matchtime=2     " 匹配时间为 200 毫秒
-
-" 状态栏设置
-set laststatus=2     " 始终显示状态栏
-" 定制状态栏具体内容
+" Customize the status line content
 set statusline=
 set statusline+=\ %F%m%r%h%w\ %=
 set statusline+=\ %p%%\ %l:%v
 set statusline+=\ %([%{&ff}\|%{(&fenc==\"\"?&enc:&fenc).((exists(\"+bomb\")\ &&\ &bomb)?\",bomb\":\"\")}%k\|%Y]%)
-
-" 立即生效对vim配置文件的更改
-autocmd BufWritePost $MYVIMRC source $MYVIMRC
