@@ -1,4 +1,4 @@
-# echo "call setup"
+# echo "call setup_colors"
 
 set -U fish_color_autosuggestion 707A8C
 set -U fish_color_cancel \x2dr
