@@ -46,7 +46,7 @@ readability-identifier-naming,
 -readability-magic-numbers,
 -cppcoreguidelines-avoid-magic-numbers,
 -readability-const-return-type,
--readability-math-missing-parentheses
+-readability-math-missing-parentheses,
 fuchsia-default-arguments-declarations,
 '
 
