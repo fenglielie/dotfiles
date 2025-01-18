@@ -35,6 +35,7 @@ modernize-*,
 mpi-*,
 performance-*,
 -performance-unnecessary-value-param,
+-performance-enum-size,
 readability-*,
 readability-identifier-naming,
 -readability-braces-around-statements,
@@ -45,7 +46,8 @@ readability-identifier-naming,
 -readability-magic-numbers,
 -cppcoreguidelines-avoid-magic-numbers,
 -readability-const-return-type,
-fuchsia-default-arguments-declarations
+-readability-math-missing-parentheses
+fuchsia-default-arguments-declarations,
 '
 
 CheckOptions:
