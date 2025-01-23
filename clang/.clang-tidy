@@ -48,6 +48,7 @@ readability-identifier-naming,
 -readability-const-return-type,
 -readability-math-missing-parentheses,
 fuchsia-default-arguments-declarations,
+-misc-use-internal-linkage,
 '
 
 CheckOptions:
