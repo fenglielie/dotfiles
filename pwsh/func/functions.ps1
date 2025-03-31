@@ -1,33 +1,10 @@
-##################################################################
-# cd ...
-
+# cd
 function Set-MyCd {
-    param
-    (
-        $Path = $null, # 要更改到的目标目录路径，默认为空
-        $LiteralPath = $null, # 要更改到的目标目录的字面路径，默认为空
-        $PassThru, # 如果指定此参数，函数将返回更改后的目标目录的路径
-        $StackName, # 未使用的参数
-        $UseTransaction       # 未使用的参数
-    )
-
-    # 如果没有提供任何参数，返回到指定目录
-    if (-not $Path -and -not $LiteralPath) {
-        Set-Location -Path $env:UserProfile # 无参数时返回默认路径
-        return
-    }
-
-    # 使用 Set-Location 命令来更改当前工作目录
-    $newPath = Set-Location @PSBoundParameters
-
-    if ($PassThru) {
-        return $newPath
-    }
+    Set-Location -Path $env:UserProfile
+    return
 }
 
-##################################################################
 # which
-
 function Get-MyWhich {
     param (
         [string]$CommandName
@@ -36,16 +13,15 @@ function Get-MyWhich {
     $command = Get-Command $CommandName -ErrorAction SilentlyContinue
 
     if ($command) {
-        return $command.Path -replace '\\', '/'  # 返回路径
-    } else {
-        Write-Error "Command '$CommandName' not found."  # 输出错误信息
-        return $null  # 返回 null
+        return $command.Path -replace '\\', '/'
+    }
+    else {
+        Write-Error "Command '$CommandName' not found."
+        return $null
     }
 }
 
-##################################################################
 # touch
-
 function New-MyTouch {
     param (
         [parameter(Mandatory = $true, Position = 0)]
@@ -62,9 +38,7 @@ function New-MyTouch {
     }
 }
 
-##################################################################
 # mkdir
-
 function New-MyMkdir {
     param (
         [parameter(Mandatory = $true, Position = 0)]
@@ -73,35 +47,26 @@ function New-MyMkdir {
 
     if (-not (Test-Path -Path $directoryPath -PathType Container)) {
         New-Item -Path $directoryPath -ItemType Directory | Out-Null
-    } else {
+    }
+    else {
         Write-Host "Dir '$directoryPath' already exist" -ForegroundColor Red
     }
 }
 
-##################################################################
-
-
-# 判断别名是否已经存在，如果存在则不替换，这个工具函数不导出
 function Add-MyAliasIfNoExists {
     param (
         [string]$AliasName,
         [string]$AliasToName
     )
 
-    # 判断命令是否可执行
+    # check if the alias already exists
     if (Get-Command $AliasName -ErrorAction SilentlyContinue) {
-        # Write-Host "'$AliasName' exists"
-
-        # 判断别名是否已经存在
+        # remove the alias if it exists
         if (Test-Path Alias:\$AliasName) {
-            # 移除别名
             Remove-Item Alias:\$AliasName
-            # Write-Host "Alias '$AliasName' has been removed."
         }
     }
     else {
-        # 不可执行时添加别名并重写
-        # Write-Host "'$AliasName' does not exist, add an alias."
         Set-Alias -Name $AliasName -Value $AliasToName -Scope Global
 
     }
@@ -111,27 +76,25 @@ function Get-MyPwd {
     (Get-Location).ToString()
 }
 
-function Get-MyPath{
+function Get-MyPath {
     $env:PATH -split ';'
 }
 
 ##################################################################
 
-# 这些命令如果不存在，则通过powershell函数伪装实现
-
+# Add aliases if not exists
 Add-MyAliasIfNoExists which Get-MyWhich
 Add-MyAliasIfNoExists touch New-MyTouch
 
-# 别名
+# Add aliases
 Set-Alias -Name cd -Value Set-MyCd -Force -Option "AllScope"
 Set-Alias -Name pwd -Value Get-MyPwd
 Set-Alias -Name mkdir -Value New-MyMkdir
 Set-Alias -Name path -Value Get-MyPath
 
-##################################################################
 
 Set-PSReadLineOption -Colors @{
-    String               = "yellow"
-    Command              = "blue"
-    Parameter            = "green"
+    String    = "yellow"
+    Command   = "blue"
+    Parameter = "green"
 }
