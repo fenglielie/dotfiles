@@ -1,8 +1,14 @@
 # cd
 function Set-MyCd {
-    Set-Location -Path $env:UserProfile
-    return
+    param ([string]$TargetPath)
+
+    if (-not $TargetPath) {
+        $TargetPath = $env:UserProfile
+    }
+
+    Set-Location -Path $TargetPath
 }
+
 
 # which
 function Get-MyWhich {
