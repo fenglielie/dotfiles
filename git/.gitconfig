@@ -16,7 +16,7 @@
 [gui]
 	encoding = utf-8
 [alias]
-	trace = log --oneline --all --graph
+	trace = log --all --graph --abbrev-commit --decorate --format=format:'%C(bold yellow)%h%C(reset)%C(auto)%d%C(reset) %s %C(bold blue)(%ar)%C(reset)'
 	now = status -s -b
 [credential "https://latex.ustc.edu.cn"]
 	provider = generic
