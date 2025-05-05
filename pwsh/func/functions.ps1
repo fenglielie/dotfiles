@@ -86,6 +86,10 @@ function Get-MyPath {
     $env:PATH -split ';'
 }
 
+function Get-ChildItem-Normal {
+    Get-ChildItem @args | Where-Object { -not $_.Name.StartsWith('.') }
+}
+
 ##################################################################
 
 # Add aliases if not exists
@@ -97,10 +101,13 @@ Set-Alias -Name cd -Value Set-MyCd -Force -Option "AllScope"
 Set-Alias -Name pwd -Value Get-MyPwd
 Set-Alias -Name mkdir -Value New-MyMkdir
 Set-Alias -Name path -Value Get-MyPath
-
+Set-Alias ls Get-ChildItem-Normal
+Set-Alias ll Get-ChildItem
 
 Set-PSReadLineOption -Colors @{
     String    = "yellow"
     Command   = "blue"
     Parameter = "green"
 }
+
+$PSStyle.FileInfo.Directory = "`e[34m"
