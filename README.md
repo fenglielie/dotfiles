@@ -1,11 +1,10 @@
 # Dotfiles
 
-This repository is used to synchronize configuration files across different platforms.
+This repository is used to synchronize configurations across different platforms.
 
 ## Usage
 
-Clone it into the home directory (or another location) and execute the `setup.py` script
-
+Clone the repository into your home directory (or another location), and execute `setup.py`.
 ```bash
 git clone git@github.com:/dotfiles.git ~/.dotfiles
 
@@ -14,56 +13,53 @@ cd ~/.dotfiles
 python ./setup.py
 ```
 
-The `setup.py` script creates symbolic links to configuration files stored in this repository, ensuring consistency across platforms.
+`setup.py` script creates symbolic links to configuration files stored in this repository, ensuring consistency across platforms.
 
-Additionally, `setup.py` provides a `--check` option to verify the availability of commonly used tools on the current platform.
+For example, a symbolic link `~/.vimrc` will be created pointing to `~/.dotfiles/vim/.vimrc`.
+If `~/.vimrc` already exists and is not a symbolic link, the script will skip it and report an error.
 
-The file paths and the check targets are defined in `config.json`, which can be modified as needed.
+> ⚠️ On Windows, administrator privileges are required to create symbolic links.
 
-> **Note:** On Windows, administrator privileges are required while creating symbolic links.
+## Setup links
 
-## Home Directory Configurations
+- Home directory (XDG)
+  - **Git**: `~/.config/git/config` (not `~/.gitconfig`)
+  - **(Linux-only)**
+    - **Vim**: `~/.vimrc`
+    - **Tmux**: `~/.config/tmux/tmux.conf` (not `~/.tmux.conf`)
+    - **Fish**: `~/.config/fish/mysetup.d`
+- Project root directory (default: `~/projectroot/` on Linux, `D:/ProjectRoot/` on Windows.)
+  - `.editorconfig`
+  - `.clang-format`
+  - `.clang-tidy`
 
-The following configuration files are managed in the home directory:
+## Check tools
 
-- **Git**: `~/.config/git/config` (not `~/.gitconfig`)
-- **(Linux-only)**
-  - **Vim**: `~/.vimrc`
-  - **Tmux**: `~/.config/tmux/tmux.conf` (not `~/.tmux.conf`)
-  - **Fish**: `~/.config/fish/mysetup.d`
+`setup.py` also provides a `--check` option to verify the availability of commonly used tools on the current platform, such as `git`, `fish`, and `tmux`.
 
-These file locations adhere to the modern **XDG Base Directory Specification** if possible.
+```bash
+python setup.py --check
+```
 
-## Project Root Configurations
+The check targets are defined in `config.json`, and this file can be customized as needed.
 
-The default project root is `~/projectroot/` on Linux and `D:/ProjectRoot/` on Windows. This can be customized in `config.json`.
+## Shell init
 
-Configuration files within the project root include:
+Due to differences between shell environments on various platforms, it is not practical to fully synchronize shell configurations.
 
-- `.editorconfig`: Standardizes text formatting settings (encoding, line endings, indentation, etc.).
-- `.clang-format`: Defines C++ code formatting rules.
-- `.clang-tidy`: Configures static code analysis for `clangd`.
+A **common initialization mechanism** is implemented through the `init.py` script, similar to `conda init`. This script injects a small automatically generated initialization code snippet into the shell's configuration file.
 
-## Shell Configurations
-
-Since shell environments differ across platforms, full synchronization of shell configurations is impractical.
-
-A **common initialization mechanism** is implemented via the `init.py` script, similar to `conda init`. This script injects a small, auto-generated initialization snippet into the shell's configuration file.
-
-To initialize bash/fish/pwsh, run:
-
+To initialize Bash, Fish, or PowerShell, run the following:
 ```bash
 ./init.py bash
 
-# or
 ./init.py fish
 
-# or (Windows)
+# Powershell (Windows-only)
 ./init.py pwsh
 ```
 
-For **Bash**, `init.py` appends the following snippet to `~/.bashrc`:
-
+For example, `init.py` adds the following snippet to `~/.bashrc`:
 ```bash
 # [START] my dotfiles init
 # Auto-generated block for my dotfiles, do not edit
@@ -75,8 +71,7 @@ fi
 # [END] my dotfiles init
 ```
 
-The `init_bash.sh` script then iterates through the `bash/func` directory and executes all Bash scripts found.
+The `init_bash.sh` script executes all bash scripts found in `~/.dotfiles/bash/func/`
 
-For **Fish**, the snippet is written to `~/.config/fish/config.fish`, following the same logic.
-
-For **PowerShell**, determining the configuration file path is more complex. The script spawns a PowerShell process to run `echo $PROFILE`, retrieves the correct path, and appends the initialization snippet accordingly.
+For Fish, the snippet is added to `~/.config/fish/config.fish`.
+For PowerShell, the script launches a PowerShell process, runs `echo $PROFILE` to locate the profile path, and then appends the initialization snippet.
