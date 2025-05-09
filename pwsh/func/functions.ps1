@@ -101,8 +101,9 @@ Set-Alias -Name cd -Value Set-MyCd -Force -Option "AllScope"
 Set-Alias -Name pwd -Value Get-MyPwd
 Set-Alias -Name mkdir -Value New-MyMkdir
 Set-Alias -Name path -Value Get-MyPath
-Set-Alias ls Get-ChildItem-Normal
 Set-Alias ll Get-ChildItem
+Set-Alias ls Get-ChildItem-Normal
+Set-Alias l Get-ChildItem-Normal
 
 Set-PSReadLineOption -Colors @{
     String    = "yellow"
