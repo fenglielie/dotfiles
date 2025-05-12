@@ -18,6 +18,7 @@
 [alias]
 	trace = log --all --graph --abbrev-commit --decorate --format=format:'%C(yellow)%h%C(reset)%C(auto)%d%C(reset) %s %C(dim blue)(%ar)%C(reset)'
 	now = status -s -b
+	ready = !git diff --quiet && git diff --cached --quiet && [ -z \"$(git ls-files --others --exclude-standard)\" ] && exit 0 || echo dirty
 [credential "https://latex.ustc.edu.cn"]
 	provider = generic
 [filter "lfs"]
