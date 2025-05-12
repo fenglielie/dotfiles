@@ -7,5 +7,5 @@ foreach ($Script in $ScriptFiles) {
     . $Script.FullName
 }
 
-# oh-my-posh scheme
+# oh-my-posh theme
 oh-my-posh init pwsh --config "$ScriptDir/../omp/simple.omp.json" | Invoke-Expression

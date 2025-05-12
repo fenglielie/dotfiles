@@ -8,18 +8,6 @@
             "segments": [
                 {
                     "properties": {
-                        "always_enabled": false,
-                        "cache_duration": "none",
-                        "profix": "",
-                        "threshold": 2000
-                    },
-                    "template": "\uf017 {{ .FormattedMs }} ",
-                    "foreground": "#D4F107",
-                    "type": "executiontime",
-                    "style": "plain"
-                },
-                {
-                    "properties": {
                         "cache_duration": "none"
                     },
                     "template": "{{ .UserName }}@{{ .HostName }} ",
@@ -62,7 +50,7 @@
                         "always_enabled": false,
                         "cache_duration": "none"
                     },
-                    "template": "{{ if eq .Code 0 }}{{ else }} [{{ .Code }}]{{ end }}",
+                    "template": "{{ if eq .Code 0 }}{{ else }} \uf071 {{ reason .Code }} {{ end }}",
                     "type": "status",
                     "style": "plain",
                     "foreground_templates": [
