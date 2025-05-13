@@ -50,7 +50,7 @@
                         "always_enabled": false,
                         "cache_duration": "none"
                     },
-                    "template": "{{ if eq .Code 0 }}{{ else }} \uf071 {{ reason .Code }} {{ end }}",
+                    "template": "{{ if eq .Code 0 }}{{ else }} \uf071 {{ end }}",
                     "type": "status",
                     "style": "plain",
                     "foreground_templates": [
