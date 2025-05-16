@@ -64,8 +64,8 @@ For example, `init.py` adds the following snippet to `~/.bashrc`:
 # [START] my dotfiles init
 # Auto-generated block for my dotfiles, do not edit
 
-if [ -f "/home/$USER/.dotfiles/bash/init_bash.sh" ]; then
-    source "/home/$USER/.dotfiles/bash/init_bash.sh"
+if [ -f "/path/to/dotfiles/bash/init_bash.sh" ]; then
+    source "/path/to/dotfiles/bash/init_bash.sh"
 fi
 
 # [END] my dotfiles init
