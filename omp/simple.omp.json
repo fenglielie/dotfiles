@@ -1,0 +1,73 @@
+{
+    "$schema": "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json",
+    "console_title_template": "{{.UserName}}@{{.HostName}}: {{.PWD}}",
+    "blocks": [
+        {
+            "type": "prompt",
+            "alignment": "left",
+            "segments": [
+                {
+                    "properties": {
+                        "cache_duration": "none"
+                    },
+                    "template": "{{ .UserName }}@{{ .HostName }} ",
+                    "foreground": "#95ffa4",
+                    "type": "session",
+                    "style": "plain"
+                },
+                {
+                    "properties": {
+                        "cache_duration": "none",
+                        "folder_separator_icon": "/",
+                        "style": "unique"
+                    },
+                    "template": "{{ if .RootDir }}{{ .Location }} {{ else }}{{ .Path }}{{ end }}",
+                    "foreground": "#87d7ff",
+                    "type": "path",
+                    "style": "plain"
+                },
+                {
+                    "properties": {
+                        "branch_icon": "",
+                        "cache_duration": "none"
+                    },
+                    "template": " ({{ .HEAD }})",
+                    "foreground": "#dcdfe4",
+                    "type": "git",
+                    "style": "plain"
+                },
+                {
+                    "properties": {
+                        "cache_duration": "none"
+                    },
+                    "type": "python",
+                    "style": "plain",
+                    "template": " {{ if .Error }}{{ .Error }}{{ else }}{{ if .Venv }}({{ .Venv }}){{ end }}{{ end }}",
+                    "foreground": "#906cff"
+                },
+                {
+                    "properties": {
+                        "always_enabled": false,
+                        "cache_duration": "none"
+                    },
+                    "template": "{{ if eq .Code 0 }}{{ else }} \uf071 {{ end }}",
+                    "type": "status",
+                    "style": "plain",
+                    "foreground_templates": [
+                        "{{ if .Error }}#ff8e95{{ end }}"
+                    ]
+                },
+                {
+                    "properties": {
+                        "cache_duration": "none"
+                    },
+                    "template": "❯ ",
+                    "foreground": "#95ffa4",
+                    "type": "text",
+                    "style": "plain"
+                }
+            ]
+        }
+    ],
+    "version": 3
+}

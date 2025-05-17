@@ -1,0 +1,28 @@
+[user]
+	name = fenglielie
+	email = fenglielie@qq.com
+[init]
+	defaultBranch = main
+[core]
+	editor = vim
+	# Ensure git correctly displays Chinese characters
+	quotepath = false
+	# Convert all line endings to LF on commit, do not convert on checkout
+	autocrlf = input
+	# Check line endings and prevent commit of files with mixed line endings
+	safecrlf = true
+[i18n]
+	commitEncoding = utf-8
+[gui]
+	encoding = utf-8
+[alias]
+	trace = log --all --graph --abbrev-commit --decorate --format=format:'%C(yellow)%h%C(reset)%C(auto)%d%C(reset) %s %C(dim blue)(%ar)%C(reset)'
+	now = status -s -b
+	ready = !git diff --quiet && git diff --cached --quiet && [ -z \"$(git ls-files --others --exclude-standard)\" ] && exit 0 || echo dirty
+[credential "https://latex.ustc.edu.cn"]
+	provider = generic
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
