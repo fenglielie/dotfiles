@@ -6,32 +6,26 @@ This repository is used to synchronize configurations across different platforms
 
 Clone the repository into your home directory (or another location), and execute `setup.py`.
 ```bash
-git clone git@github.com:/dotfiles.git ~/.dotfiles
+git clone git@github.com:/dotfiles.git ~/.config/dotfiles
 
-cd ~/.dotfiles
+cd ~/.config/dotfiles
 
 python ./setup.py
 ```
 
 `setup.py` script creates symbolic links to configuration files stored in this repository, ensuring consistency across platforms.
 
-For example, a symbolic link `~/.vimrc` will be created pointing to `~/.dotfiles/vim/.vimrc`.
+For example, a symbolic link `~/.vimrc` will be created pointing to `[path/to/dotfiles]/vim/.vimrc`.
 If `~/.vimrc` already exists and is not a symbolic link, the script will skip it and report an error.
 
 > ⚠️ On Windows, administrator privileges are required to create symbolic links.
 
 ## Setup links
 
-- Home directory (XDG)
-  - **Git**: `~/.config/git/config` (not `~/.gitconfig`)
-  - **(Linux-only)**
-    - **Vim**: `~/.vimrc`
-    - **Tmux**: `~/.config/tmux/tmux.conf` (not `~/.tmux.conf`)
-    - **Fish**: `~/.config/fish/mysetup.d`
-- Project root directory (default: `~/projectroot/` on Linux, `D:/ProjectRoot/` on Windows.)
-  - `.editorconfig`
-  - `.clang-format`
-  - `.clang-tidy`
+- **Git**: `~/.config/git/config` (not `~/.gitconfig`)
+- **Vim**: `~/.vimrc` (Linux-only)
+- **Tmux**: `~/.config/tmux/tmux.conf` (not `~/.tmux.conf`, Linux-only)
+
 
 ## Check tools
 
@@ -64,14 +58,14 @@ For example, `init.py` adds the following snippet to `~/.bashrc`:
 # [START] my dotfiles init
 # Auto-generated block for my dotfiles, do not edit
 
-if [ -f "/path/to/dotfiles/bash/init_bash.sh" ]; then
-    source "/path/to/dotfiles/bash/init_bash.sh"
+if [ -f "[path/to/dotfiles]/bash/init_bash.sh" ]; then
+    source "[path/to/dotfiles]/bash/init_bash.sh"
 fi
 
 # [END] my dotfiles init
 ```
 
-The `init_bash.sh` script executes all bash scripts found in `~/.dotfiles/bash/func/`
+The `init_bash.sh` script executes all bash scripts found in `[path/to/dotfiles]/bash/func/`
 
 For Fish, the snippet is added to `~/.config/fish/config.fish`.
 For PowerShell, the script launches a PowerShell process, runs `echo $PROFILE` to locate the profile path, and then appends the initialization snippet.

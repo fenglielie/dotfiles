@@ -29,29 +29,6 @@
                     "action": "symlink"
                 }
             ]
-        },
-        {
-            "dest_prefix": {
-                "linux": "${HOME}/projectroot",
-                "windows": "D:/projectroot"
-            },
-            "entries": [
-                {
-                    "source": "editorconfig/.editorconfig",
-                    "dest": ".editorconfig",
-                    "action": "symlink"
-                },
-                {
-                    "source": "clang/.clang-format",
-                    "dest": ".clang-format",
-                    "action": "symlink"
-                },
-                {
-                    "source": "clang/.clang-tidy",
-                    "dest": ".clang-tidy",
-                    "action": "symlink"
-                }
-            ]
         }
     ],
     "check_groups": {
