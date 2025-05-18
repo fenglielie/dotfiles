@@ -22,9 +22,9 @@ If `~/.vimrc` already exists and is not a symbolic link, the script will skip it
 
 ## Setup links
 
-- **Git**: `~/.config/git/config` (not `~/.gitconfig`)
-- **Vim**: `~/.vimrc` (Linux-only)
-- **Tmux**: `~/.config/tmux/tmux.conf` (not `~/.tmux.conf`, Linux-only)
+- **Git**: `~/.config/git/config`
+- **Vim**: `~/.vimrc`
+- **Tmux**: `~/.config/tmux/tmux.conf` (Linux-only)
 
 
 ## Check tools

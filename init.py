@@ -34,8 +34,8 @@ def update_config_file(file_path, config, start_marker, end_marker, script_templ
             print(f"No changes made to {file_path}, the content is already up-to-date.")
             return
         else:
-            print(f"${existing_block}$")
-            print(f"${script_text}$")
+            print(f"FROM:\n{existing_block}\n")
+            print(f"TO:\n{script_text}\n")
 
             file_content = (
                 file_content[:start_idx] + [script_text] + file_content[end_idx + 1 :]

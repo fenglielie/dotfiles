@@ -10,6 +10,11 @@
                     "source": "git/.gitconfig",
                     "dest": ".config/git/config",
                     "action": "symlink"
+                },
+                {
+                    "source": "vim/.vimrc",
+                    "dest": ".vimrc",
+                    "action": "symlink"
                 }
             ]
         },
@@ -21,11 +26,6 @@
                 {
                     "source": "tmux/tmux.conf",
                     "dest": ".config/tmux/tmux.conf",
-                    "action": "symlink"
-                },
-                {
-                    "source": "vim/.vimrc",
-                    "dest": ".vimrc",
                     "action": "symlink"
                 }
             ]

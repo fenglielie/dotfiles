@@ -38,14 +38,20 @@ def create_symlink(src, dest):
 
     if os.path.lexists(dest) and not os.path.islink(dest):
         logging.error(
-            f"'{dest}' exists and is not a symlink. Please remove it manually."
+            f"'{dest}' (file/dir) exists and is not a symlink. Please remove it manually."
         )
         return False
 
     create_symlink_flag = False
 
     if os.path.lexists(dest) and os.path.islink(dest):
-        logging.warning(f"'{dest}' (symlink) already exists. Remove it.")
+        old_target = os.path.realpath(dest)
+        if os.path.abspath(old_target) == os.path.abspath(src):
+            logging.info(f"'{dest}' --> '{src}' (symlink) already exists. Skip.")
+            return False
+
+        logging.warning(f"'{dest}' --> '{old_target}' (symlink) exists. Replace it.")
+
         os.remove(dest)
         create_symlink_flag = True
     else:
@@ -56,7 +62,7 @@ def create_symlink(src, dest):
         try:
             dest_dir = os.path.dirname(dest)
             if not os.path.exists(dest_dir):
-                logging.debug(f"'{dest_dir}' (dir) does not exist. Creating it now.")
+                logging.debug(f"'{dest_dir}' (dir) does not exist. Create it.")
                 os.makedirs(dest_dir)
                 logging.debug(f"Create '{dest_dir}' (dir)")
 
@@ -73,7 +79,7 @@ def create_symlink(src, dest):
 
 def copy_item(src, dest):
     if os.path.lexists(dest):
-        logging.error(f"'{dest}' already exists. Please remove it manually.")
+        logging.error(f"'{dest}' (file/dir) already exists. Please remove it manually.")
         return False
 
     user_input = input("Copy '{dest}' ? (y/n): ").strip().lower()
@@ -83,7 +89,7 @@ def copy_item(src, dest):
         try:
             dest_dir = os.path.dirname(dest)
             if not os.path.exists(dest_dir):
-                logging.debug(f"'{dest_dir}' (dir) does not exist. Creating it now.")
+                logging.debug(f"'{dest_dir}' (dir) does not exist. Create it.")
                 os.makedirs(dest_dir)
                 logging.debug(f"Create '{dest_dir}' (dir)")
 
