@@ -36,7 +36,7 @@ def path_expand(path):
 
 def create_symlink(src, dest):
 
-    if os.path.exists(dest) and not os.path.islink(dest):
+    if os.path.lexists(dest) and not os.path.islink(dest):
         logging.error(
             f"'{dest}' exists and is not a symlink. Please remove it manually."
         )
@@ -44,7 +44,7 @@ def create_symlink(src, dest):
 
     create_symlink_flag = False
 
-    if os.path.exists(dest) and os.path.islink(dest):
+    if os.path.lexists(dest) and os.path.islink(dest):
         logging.warning(f"'{dest}' (symlink) already exists. Remove it.")
         os.remove(dest)
         create_symlink_flag = True
@@ -72,7 +72,7 @@ def create_symlink(src, dest):
 
 
 def copy_item(src, dest):
-    if os.path.exists(dest):
+    if os.path.lexists(dest):
         logging.error(f"'{dest}' already exists. Please remove it manually.")
         return False
 
