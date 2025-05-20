@@ -6,7 +6,7 @@ This repository is used to synchronize configurations across different platforms
 
 Clone the repository into your home directory (or another location), and execute `setup.py`.
 ```bash
-git clone git@github.com:/dotfiles.git ~/.config/dotfiles
+git clone git@github.com:fenglielie/dotfiles.git ~/.config/dotfiles
 
 cd ~/.config/dotfiles
 
