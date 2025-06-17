@@ -38,7 +38,7 @@ set vb t_vb=                    " Clear terminal bell codes
 
 " Display invisible characters
 set list                                " Show invisible characters
-set listchars=tab:>\ ,trail:·,nbsp:+    " Define styles for tabs and trailing spaces
+set listchars=tab:→\ ,trail:·,nbsp:␣    " Define styles for tabs and trailing spaces
 
 " Search settings
 set ignorecase                  " Ignore case during search
