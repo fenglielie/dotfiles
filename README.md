@@ -18,7 +18,7 @@ python ./setup.py
 For example, a symbolic link `~/.vimrc` will be created pointing to `[path/to/dotfiles]/vim/.vimrc`.
 If `~/.vimrc` already exists and is not a symbolic link, the script will skip it and report an error.
 
-> ⚠️ On Windows, administrator privileges are required to create symbolic links.
+On Windows, administrator privileges are required to create symbolic links.
 
 ## Setup links
 
