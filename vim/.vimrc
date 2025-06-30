@@ -38,7 +38,6 @@ set vb t_vb=                    " Clear terminal bell codes
 
 " Display invisible characters
 set list                                " Show invisible characters
-set listchars=tab:→\ ,trail:·,nbsp:␣    " Define styles for tabs and trailing spaces
 
 " Search settings
 set ignorecase                  " Ignore case during search
@@ -52,19 +51,16 @@ set encoding=utf-8              " Set file encoding to UTF-8
 set termencoding=utf-8          " Set terminal encoding to UTF-8
 set fileencodings=utf-8,ucs-bom,gb18030,gbk,gb2312  " Recognize multiple file encodings
 
+" ========= command =========
 
-" #####################
-" #      command      #
-" #####################
-
-" Visualize line endings
+" Visualize tabs, trailing spaces and end-of-line characters
 function! VisualizeEOL()
     if &fileformat == 'dos'
-        set listchars+=eol:↵
+        set listchars=tab:→\ ,trail:·,nbsp:␣,eol:↵
     elseif &fileformat == 'mac'
-        set listchars+=eol:←
+        set listchars=tab:→\ ,trail:·,nbsp:␣,eol:←
     elseif &fileformat == 'unix'
-        set listchars+=eol:↓
+        set listchars=tab:→\ ,trail:·,nbsp:␣,eol:↓
     endif
 endfunction
 
@@ -76,11 +72,6 @@ function! CleanWhitespace()
 endfunction
 
 command! TrimWS call CleanWhitespace()
-
-
-" #####################
-" #      autocmd      #
-" #####################
 
 " Check the file's encoding and newline format
 function! CheckFileEncodingAndEOL()
@@ -95,16 +86,13 @@ function! CheckFileEncodingAndEOL()
     endif
 endfunction
 
-autocmd BufReadPost * call CheckFileEncodingAndEOL()
+augroup FileCheckAndEOL
+    autocmd!
+    autocmd BufReadPost * call CheckFileEncodingAndEOL()
+    autocmd BufReadPost * call VisualizeEOL()
+augroup END
 
-" Highlight the current line in insert mode, disable it in other modes
-autocmd InsertEnter * set cursorline
-autocmd InsertLeave * set nocursorline
-
-
-" ########################
-" #      statusline      #
-" ########################
+" ========= statusline =========
 
 " Always show the status line
 set laststatus=2
