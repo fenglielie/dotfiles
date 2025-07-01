@@ -36,9 +36,6 @@ set noerrorbells                " Disable error sounds
 set novisualbell                " Disable visual bell (screen flash)
 set vb t_vb=                    " Clear terminal bell codes
 
-" Display invisible characters
-set list                                " Show invisible characters
-
 " Search settings
 set ignorecase                  " Ignore case during search
 set smartcase                   " Case-sensitive if search includes uppercase letters
@@ -54,17 +51,24 @@ set fileencodings=utf-8,ucs-bom,gb18030,gbk,gb2312  " Recognize multiple file en
 " ========= command =========
 
 " Visualize tabs, trailing spaces and end-of-line characters
-function! VisualizeEOL()
-    if &fileformat == 'dos'
-        set listchars=tab:→\ ,trail:·,nbsp:␣,eol:↵
-    elseif &fileformat == 'mac'
-        set listchars=tab:→\ ,trail:·,nbsp:␣,eol:←
-    elseif &fileformat == 'unix'
-        set listchars=tab:→\ ,trail:·,nbsp:␣,eol:↓
+function! ToggleViz()
+    if &list
+        set nolist
+        echo "invisible characters visualization OFF"
+    else
+        if &fileformat ==# 'dos'
+            set listchars=tab:→\ ,trail:·,nbsp:␣,eol:↵
+        elseif &fileformat ==# 'mac'
+            set listchars=tab:→\ ,trail:·,nbsp:␣,eol:←
+        else
+            set listchars=tab:→\ ,trail:·,nbsp:␣,eol:↓
+        endif
+        set list
+        echo "invisible characters visualization ON"
     endif
 endfunction
 
-command! EOLViz call VisualizeEOL()
+command! Viz call ToggleViz()
 
 " Clean trailing whitespace
 function! CleanWhitespace()
@@ -86,10 +90,9 @@ function! CheckFileEncodingAndEOL()
     endif
 endfunction
 
-augroup FileCheckAndEOL
+augroup FileCheck
     autocmd!
     autocmd BufReadPost * call CheckFileEncodingAndEOL()
-    autocmd BufReadPost * call VisualizeEOL()
 augroup END
 
 " ========= statusline =========
