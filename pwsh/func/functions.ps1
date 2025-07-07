@@ -18,14 +18,33 @@ function Get-MyWhich {
 
     $command = Get-Command $CommandName -ErrorAction SilentlyContinue
 
-    if ($command) {
-        return $command.Path -replace '\\', '/'
-    }
-    else {
+    if (-not $command) {
         Write-Error "Command '$CommandName' not found."
         return $null
     }
+
+    switch ($command.CommandType) {
+        'Application' {
+            return $command.Path -replace '\\', '/'
+        }
+        'Alias' {
+            return "Alias to: $($command.Definition)"
+        }
+        'Function' {
+            return "Function: $CommandName"
+        }
+        'Cmdlet' {
+            return "Cmdlet: $($command.Name)"
+        }
+        'ExternalScript' {
+            return "Script file: $($command.Path -replace '\\', '/')"
+        }
+        default {
+            return "Unsupported command type: $($command.CommandType)"
+        }
+    }
 }
+
 
 # touch
 function New-MyTouch {
