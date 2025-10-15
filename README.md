@@ -37,7 +37,7 @@ python setup.py --check
 
 The check targets are defined in `config.json`, and this file can be customized as needed.
 
-## Shell init
+## Init shell
 
 Due to differences between shell environments on various platforms, it is not practical to fully synchronize shell configurations.
 
