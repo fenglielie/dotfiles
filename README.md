@@ -151,7 +151,7 @@ set -U fish_color_valid_path \x2d\x2dunderline
 
 ### pwsh
 
-可以运行 `echo $PROFILE` 获取配置文件位置，配置文件名称为 `Microsoft.PowerShell_profile.ps1`。
+可以运行 `echo $PROFILE` 获取配置文件的位置，配置文件名称为 `Microsoft.PowerShell_profile.ps1`。
 
 在 `$PROFILE` 中添加以下内容以提供自定义命令，包括 `cd`，`which`，`touch`，`mkdir` 等。
 ```pwsh
@@ -298,7 +298,8 @@ $env:http_proxy = "http://127.0.0.1:7892"
 $env:https_proxy = "http://127.0.0.1:7892"
 ```
 
-基于 oh-my-pwsh 设置自定义主题（需要修改到 `simple.omp.json` 主题文件的路径）
+基于 oh-my-pwsh 使用自定义主题（`simple.omp.json` 主题文件需要存放在配置文件相同的文件夹中，否则需要修改路径参数）
 ```pwsh
-oh-my-posh init pwsh --config "./simple.omp.json" | Invoke-Expression
+$ScriptDir = Split-Path -Parent -Path $MyInvocation.MyCommand.Path
+oh-my-posh init pwsh --config "$ScriptDir/simple.omp.json" | Invoke-Expression
 ```
