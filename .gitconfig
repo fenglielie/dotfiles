@@ -1,6 +1,6 @@
 [user]
-	name = fenglielie
-	email = fenglielie@qq.com
+	# name = NAME
+	# email = EMAIL
 [init]
 	defaultBranch = main
 [core]
