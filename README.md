@@ -1,32 +1,34 @@
 # Dotfiles
 
-个人使用的配置文件汇总，包括：
+Personal configuration files for various tools.
 
 - Vim：[~/.vimrc](./.vimrc)
-- Tmux：[~/.tmux.conf](.tmux.conf)（不支持 Windows）
-- Git: [~/.gitconfig](./.gitconfig) （需要补全姓名和邮箱）
+- Tmux：[~/.tmux.conf](.tmux.conf) (not supported on Windows)
+- Git: [~/.gitconfig](./.gitconfig) (fill in your name and email)
 - clang：
   - [.clang-format](./.clang-format)
   - [.clang-tidy](./.clang-tidy)
 - editorconfig: [.editorconfig](./.editorconfig)
 
-直接复制到对应位置即可使用。
+copy these files to your home directory.
 
-注意：
+Remark:
 
-- Git 配置文件也支持 XDG 规范，存放在 `~/.config/git/config`
-- Tmux （高版本）配置文件也支持 XDG 规范，存放在 `~/.config/tmux/tmux.conf`
+- Git also supports the XDG path: `~/.config/git/config`
+- Tmux (recent versions) supports the XDG path: `~/.config/tmux/tmux.conf`
 
 
 ## Shell Configuration
 
-对于几种 shell（bash/fish/pwsh），还有对应的具体配置。
+Shell-specific configurations for bash, fish, and PowerShell (pwsh).
+ 
+### 
 
 ### bash
 
-在 `~/.bashrc` 中添加以下内容：
+Add the following lines to `~/.bashrc`.
 
-`ls` 和 `rm` 相关的别名
+Aliases:
 ```bash
 alias ll='ls -lFh'
 alias lla='ls -AlFh'
@@ -35,14 +37,14 @@ alias l='ls -CF'
 alias rm='rm -i'
 ```
 
-有 `exa` 的情况下配置 `exa` 的选项
+Use `exa` if available:
 ```bash
 if command -v exa >/dev/null 2>&1; then
     alias exa='exa --group-directories-first --ignore-glob=".git|node_modules|__pycache__" --icons'
 fi
 ```
 
-自定义函数以简化 Tmux 的使用
+Simple tmux helper:
 ```bash
 tm() {
     # Check for help options
@@ -98,15 +100,15 @@ tm() {
 
 ### fish
 
-在 `~/.config/fish/config.fish` 中添加以下内容：
+Add to `~/.config/fish/config.fish`.
 
-关闭 fish 默认的欢迎词
+Disable greeting:
 ```
 function fish_greeting
 end
 ```
 
-`ls` 和 `rm` 相关的别名
+Aliases:
 ```fish
 abbr -a ll ls -lFh
 abbr -a lla ls -AlFh
@@ -115,14 +117,14 @@ abbr -a l ls -CF
 abbr -a rm rm -i
 ```
 
-有 `exa` 的情况下配置 `exa` 的选项
+Use `exa` if available:
 ```fish
 if type -q exa
     alias exa='exa --group-directories-first --ignore-glob=".git|node_modules|__pycache__" --icons'
 end
 ```
 
-设置主题样式
+Color theme:
 ```fish
 set -U fish_color_autosuggestion 707A8C
 set -U fish_color_cancel \x2dr
@@ -151,9 +153,9 @@ set -U fish_color_valid_path \x2d\x2dunderline
 
 ### pwsh
 
-可以运行 `echo $PROFILE` 获取配置文件的位置，配置文件名称为 `Microsoft.PowerShell_profile.ps1`。
+Run `echo $PROFILE` to find your config file (`Microsoft.PowerShell_profile.ps1`).
 
-在 `$PROFILE` 中添加以下内容以提供自定义命令，包括 `cd`，`which`，`touch`，`mkdir` 等。
+Add the following functions and aliases.
 ```pwsh
 # cd
 function Set-MyCd {
@@ -261,9 +263,7 @@ function Get-MyPwd {
 function Get-ChildItem-Normal {
     Get-ChildItem @args | Where-Object { -not $_.Name.StartsWith('.') }
 }
-
-##################################################################
-
+ 
 # Add aliases if not exists
 Add-MyAliasIfNoExists which Get-MyWhich
 Add-MyAliasIfNoExists touch New-MyTouch
@@ -285,20 +285,20 @@ Set-PSReadLineOption -Colors @{
 $PSStyle.FileInfo.Directory = "`e[34m"
 ```
 
-在命令行中使用 vim.exe
+Use Vim in PowerShell:
 ```pwsh
 function vim {
     & "path\to\vim.exe" @Args
 }
 ```
 
-设置网络代理环境变量
+Network proxy:
 ```pwsh
 $env:http_proxy = "http://127.0.0.1:7892"
 $env:https_proxy = "http://127.0.0.1:7892"
 ```
 
-基于 oh-my-pwsh 使用自定义主题（`simple.omp.json` 主题文件需要存放在配置文件相同的文件夹中，否则需要修改路径参数）
+Use oh-my-posh theme (`simple.omp.json` in same folder):
 ```pwsh
 $ScriptDir = Split-Path -Parent -Path $MyInvocation.MyCommand.Path
 oh-my-posh init pwsh --config "$ScriptDir/simple.omp.json" | Invoke-Expression
