@@ -21,8 +21,8 @@ Remark:
 ## Shell Configuration
 
 Shell-specific configurations for bash, fish, and PowerShell (pwsh).
- 
-### 
+
+###
 
 ### bash
 
@@ -35,13 +35,6 @@ alias lla='ls -AlFh'
 alias la='ls -A'
 alias l='ls -CF'
 alias rm='rm -i'
-```
-
-Use `exa` if available:
-```bash
-if command -v exa >/dev/null 2>&1; then
-    alias exa='exa --group-directories-first --ignore-glob=".git|node_modules|__pycache__" --icons'
-fi
 ```
 
 Simple tmux helper:
@@ -115,13 +108,6 @@ abbr -a lla ls -AlFh
 abbr -a la ls -A
 abbr -a l ls -CF
 abbr -a rm rm -i
-```
-
-Use `exa` if available:
-```fish
-if type -q exa
-    alias exa='exa --group-directories-first --ignore-glob=".git|node_modules|__pycache__" --icons'
-end
 ```
 
 Color theme:
@@ -263,7 +249,7 @@ function Get-MyPwd {
 function Get-ChildItem-Normal {
     Get-ChildItem @args | Where-Object { -not $_.Name.StartsWith('.') }
 }
- 
+
 # Add aliases if not exists
 Add-MyAliasIfNoExists which Get-MyWhich
 Add-MyAliasIfNoExists touch New-MyTouch
