@@ -14,7 +14,7 @@
 	encoding = utf-8
 [alias]
 	trace = log --all --graph --abbrev-commit --decorate --format=format:'%C(yellow)%h%C(reset) %s %C(dim blue)(%ar)%C(reset)%C(auto)%d%C(reset)'
-	trace2 = log --all --graph --abbrev-commit --decorate --format=format:'%C(yellow)%h%C(reset) %s %C(dim blue)(%ar)%C(reset)%n%C(auto)%d%C(reset)'
+	trace2 = log --all --graph --abbrev-commit --decorate --format=format:'%C(yellow)%h%C(reset) %s %C(dim blue)(%ar)%C(reset)%n%C(auto)%an <%ae> %d%C(reset)'
 	now = status -s -b
 [filter "lfs"]
 	clean = git-lfs clean -- %f
